@@ -21,15 +21,14 @@ int main(int argc, char *argv[])
     }
 
     std::string line, instr, var;
-    int ACC = 0;                                               // Accumulator
-    std::unordered_map<std::string, int> memory;               // Simulated memory
-    std::unordered_map<std::string, int> labels;               // Labels for jumps
-    std::unordered_map<int, std::vector<std::string>> program; // Stores the program line by line
+    int ACC = 0;                                  // Accumulator
+    std::unordered_map<std::string, int> memory;  // Simulated memory
+    std::unordered_map<std::string, int> labels;  // Labels for jumps
+    std::unordered_map<int, std::string> program; // Stores the program line by line
 
     // First pass: builds the label map and stores the lines of the program
     std::string label;
     int address = 0;
-    int lineOffset = 0;
     bool stopFlag = false;
     while (getline(file, line))
     {
@@ -52,39 +51,36 @@ int main(int argc, char *argv[])
         {
             iss >> var;
             memory[label] = stoi(var);
-            lineOffset = 1;
         }
 
         else if (instr == "SPACE")
         {
             memory[label] = 0;
-            lineOffset = 1;
         }
 
         else if (instr == "STOP")
         {
-            program[address].push_back(instr);
+            program[address] = instr;
+            address++;
             while (iss >> instr)
-                program[address].push_back(instr);
+            {
+                program[address] = instr;
+                address++;
+            }
 
             stopFlag = true;
-            lineOffset = 1;
         }
-
-        else if (instr == "COPY")
-            lineOffset = 3;
-
-        else
-            lineOffset = 2;
 
         if (!stopFlag)
         {
-            program[address].push_back(instr);
+            program[address] = instr;
+            address++;
             while (iss >> instr)
-                program[address].push_back(instr);
+            {
+                program[address] = instr;
+                address++;
+            }
         }
-
-        address += lineOffset;
     }
 
     file.close();
@@ -108,48 +104,48 @@ int main(int argc, char *argv[])
     instr = "";
     while (instr != "STOP")
     {
-        instr = program[PC][0];
+        instr = program[PC];
 
         if (instr == "INPUT")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             std::cout << "Enter a value for " << label << ": ";
             std::cin >> memory[label];
             PC += 2;
         }
         else if (instr == "LOAD")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             ACC = memory[label];
             PC += 2;
         }
         else if (instr == "ADD")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             ACC += memory[label];
             PC += 2;
         }
         else if (instr == "SUB")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             ACC -= memory[label];
             PC += 2;
         }
         else if (instr == "MULT")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             ACC *= memory[label];
             PC += 2;
         }
         else if (instr == "STORE")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             memory[label] = ACC;
             PC += 2;
         }
         else if (instr == "OUTPUT")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             std::cout << label << " = " << memory[label] << std::endl;
             PC += 2;
         }
@@ -159,20 +155,20 @@ int main(int argc, char *argv[])
         }
         else if (instr == "SPACE")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             memory[label] = 0; // Initializes memory with 0
             PC++;
         }
         else if (instr == "CONST")
         {
-            label = program[PC][1];
-            int value = stoi(program[PC][2]);
+            label = program[PC + 1];
+            int value = stoi(program[PC + 2]);
             memory[label] = value;
             PC++;
         }
         else if (instr == "JUMPZ")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             if (ACC == 0)
             {
                 PC = labels[label];
@@ -182,7 +178,7 @@ int main(int argc, char *argv[])
         }
         else if (instr == "JUMPP")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             if (ACC > 0)
             {
                 PC = labels[label];
@@ -192,7 +188,7 @@ int main(int argc, char *argv[])
         }
         else if (instr == "JUMPN")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             if (ACC < 0)
             {
                 PC = labels[label];
@@ -202,7 +198,7 @@ int main(int argc, char *argv[])
         }
         else if (instr == "JUMP")
         {
-            label = program[PC][1];
+            label = program[PC + 1];
             PC = labels[label];
         }
     }
