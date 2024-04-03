@@ -45,6 +45,8 @@ int main(int argc, char *argv[])
 
             if (!(iss >> instr))
                 continue; // Empty line or no instruction
+            else
+                address++;
         }
 
         if (instr == "CONST")
@@ -64,6 +66,8 @@ int main(int argc, char *argv[])
             address++;
             while (iss >> instr)
             {
+                if (instr[0] == ';')
+                    break;
                 program[address] = instr;
                 address++;
             }
@@ -77,6 +81,8 @@ int main(int argc, char *argv[])
             address++;
             while (iss >> instr)
             {
+                if (instr[0] == ';')
+                    break;
                 program[address] = instr;
                 address++;
             }
@@ -200,6 +206,11 @@ int main(int argc, char *argv[])
         {
             label = program[PC + 1];
             PC = labels[label];
+        }
+        else
+        {
+            std::cerr << "Invalid instruction: " << instr << std::endl;
+            return 1;
         }
     }
 
