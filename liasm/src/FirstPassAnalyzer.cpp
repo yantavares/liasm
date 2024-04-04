@@ -1,10 +1,10 @@
 #include "FirstPassAnalyzer.hpp"
 
 FirstPassAnalyzer::FirstPassAnalyzer(
-    std::vector<uint16_t> &memory,
-    std::unordered_map<std::string, u_int16_t> &labels,
-    std::unordered_map<u_int16_t, std::string> &program)
-    : memory(memory), labels(labels), program(program)
+    std::vector<uint16_t> &RAM,
+    std::vector<std::string> &ROM,
+    std::unordered_map<std::string, u_int16_t> &labels)
+    : RAM(RAM), ROM(ROM), labels(labels)
 {
 }
 
@@ -50,12 +50,12 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
     if (instr == "CONST")
     {
         iss >> var;
-        memory[labels[label]] = std::stoi(var);
+        RAM[labels[label]] = std::stoi(var);
         address++;
     }
     else if (instr == "SPACE")
     {
-        memory[labels[label]] = 0;
+        RAM[labels[label]] = 0;
         address++;
     }
     else if (instr == "STOP")
@@ -64,14 +64,14 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
     }
 
     // Record instruction and possibly additional operands
-    program[address++] = instr;
+    ROM[address++] = instr;
     while (!stopFlag && iss >> instr)
     {
         if (instr[0] == ';')
         {
             break; // Comment detected, stop processing the line
         }
-        program[address++] = instr;
+        ROM[address++] = instr;
     }
 }
 

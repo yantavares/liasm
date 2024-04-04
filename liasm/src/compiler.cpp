@@ -24,23 +24,19 @@ int main(int argc, char *argv[])
     }
 
     constexpr size_t MEMORY_SIZE = 65536;      // For a 16-bit address space
-    std::vector<uint16_t> memory(MEMORY_SIZE); // Simulated memory -> 2^16 16-bit words
+    std::vector<uint16_t> RAM(MEMORY_SIZE);    // Simulated memory -> 2^16 16-bit words
+    std::vector<std::string> ROM(MEMORY_SIZE); // Stores the program token by token
+    // TODO change instructions to uint16_t instead of string
 
-    std::unordered_map<std::string, u_int16_t> labels;  // Labels for jumps
-    std::unordered_map<u_int16_t, std::string> program; // Stores the program line by line
+    std::unordered_map<std::string, u_int16_t> labels; // Labels for jumps
 
     // First pass: builds the label map and stores the lines of the program
-    FirstPassAnalyzer analyzer(memory, labels, program);
+    FirstPassAnalyzer analyzer(RAM, labels, ROM);
     analyzer.analyse(file);
     analyzer.printLabels();
 
-    for (const auto &[address, instr] : program)
-    {
-        std::cout << address << ": " << instr << std::endl;
-    }
-
     // Second pass: executes the program
-    SecondPassExecutor executor(memory, labels, program);
+    SecondPassExecutor executor(RAM, labels, ROM);
     executor.execute();
 
     return 0;
