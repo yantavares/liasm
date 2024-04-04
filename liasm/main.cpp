@@ -45,19 +45,19 @@ int main(int argc, char *argv[])
 
             if (!(iss >> instr))
                 continue; // Empty line or no instruction
-            else
-                address++;
         }
 
         if (instr == "CONST")
         {
             iss >> var;
             memory[label] = stoi(var);
+            address++;
         }
 
         else if (instr == "SPACE")
         {
             memory[label] = 0;
+            address++;
         }
 
         else if (instr == "STOP")

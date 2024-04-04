@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "firstPass.hpp"
-#include "secondPass.hpp"
+#include "FirstPassAnalyzer.hpp"
+#include "SecondPassExecutor.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,16 +23,18 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int ACC = 0, PC = 0;                          // Accumulator
     std::unordered_map<std::string, int> memory;  // Simulated memory
     std::unordered_map<std::string, int> labels;  // Labels for jumps
     std::unordered_map<int, std::string> program; // Stores the program line by line
 
     // First pass: builds the label map and stores the lines of the program
-    firstPass(file, memory, labels, program);
+    FirstPassAnalyzer analyzer(memory, labels, program);
+    analyzer.analyse(file);
+    analyzer.printLabels();
 
     // Second pass: executes the program
-    secondPass(ACC, PC, memory, labels, program);
+    SecondPassExecutor executor(memory, labels, program);
+    executor.execute();
 
     return 0;
 }
