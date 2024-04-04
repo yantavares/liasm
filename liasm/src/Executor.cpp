@@ -140,11 +140,11 @@ void Executor::jump(u_int16_t &addr)
     PC = addr;
 }
 
-std::string Executor::findKeyByValue(uint16_t &value)
+std::string Executor::findKeyByValue(u_int16_t &addr)
 {
     for (const auto &pair : labels)
     {
-        if (pair.second == value)
+        if (pair.second == addr)
         {
             return pair.first;
         }
