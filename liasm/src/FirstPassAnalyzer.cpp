@@ -1,9 +1,9 @@
 #include "FirstPassAnalyzer.hpp"
 
 FirstPassAnalyzer::FirstPassAnalyzer(
-    std::unordered_map<std::string, int> &memory,
-    std::unordered_map<std::string, int> &labels,
-    std::unordered_map<int, std::string> &program)
+    std::unordered_map<std::string, u_int16_t> &memory,
+    std::unordered_map<std::string, u_int16_t> &labels,
+    std::unordered_map<u_int16_t, std::string> &program)
     : memory(memory), labels(labels), program(program)
 {
 }
@@ -12,7 +12,7 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
 {
     std::string line, instr, var;
     std::string label;
-    int address = 0;
+    u_int16_t address = 0;
 
     while (getline(file, line))
     {
@@ -31,7 +31,7 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
 }
 
 void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstream &iss,
-                                           std::string &label, int &address)
+                                           std::string &label, u_int16_t &address)
 {
     std::string var;
 

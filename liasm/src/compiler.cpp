@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::unordered_map<std::string, int> memory;  // Simulated memory
-    std::unordered_map<std::string, int> labels;  // Labels for jumps
-    std::unordered_map<int, std::string> program; // Stores the program line by line
+    std::unordered_map<std::string, u_int16_t> memory;  // Simulated memory
+    std::unordered_map<std::string, u_int16_t> labels;  // Labels for jumps
+    std::unordered_map<u_int16_t, std::string> program; // Stores the program line by line
 
     // First pass: builds the label map and stores the lines of the program
     FirstPassAnalyzer analyzer(memory, labels, program);

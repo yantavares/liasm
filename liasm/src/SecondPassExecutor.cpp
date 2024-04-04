@@ -1,8 +1,8 @@
 #include "SecondPassExecutor.hpp"
 
-SecondPassExecutor::SecondPassExecutor(std::unordered_map<std::string, int> &memory,
-                                       std::unordered_map<std::string, int> &labels,
-                                       std::unordered_map<int, std::string> &program)
+SecondPassExecutor::SecondPassExecutor(std::unordered_map<std::string, u_int16_t> &memory,
+                                       std::unordered_map<std::string, u_int16_t> &labels,
+                                       std::unordered_map<u_int16_t, std::string> &program)
     : memory(memory), labels(labels), program(program) {}
 
 int SecondPassExecutor::execute()

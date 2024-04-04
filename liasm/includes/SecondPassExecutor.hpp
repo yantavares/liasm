@@ -10,20 +10,20 @@
 class SecondPassExecutor
 {
 public:
-    SecondPassExecutor(std::unordered_map<std::string, int> &memory,
-                       std::unordered_map<std::string, int> &labels,
-                       std::unordered_map<int, std::string> &program);
+    SecondPassExecutor(std::unordered_map<std::string, u_int16_t> &memory,
+                       std::unordered_map<std::string, u_int16_t> &labels,
+                       std::unordered_map<u_int16_t, std::string> &program);
 
     // Executes the program
     int execute();
 
 private:
-    int ACC = 0; // Accumulator
-    int PC = 0;  // Program Counter
+    u_int16_t ACC = 0; // Accumulator
+    u_int16_t PC = 0;  // Program Counter
 
-    std::unordered_map<std::string, int> &memory;
-    std::unordered_map<std::string, int> &labels;
-    std::unordered_map<int, std::string> &program;
+    std::unordered_map<std::string, u_int16_t> &memory;
+    std::unordered_map<std::string, u_int16_t> &labels;
+    std::unordered_map<u_int16_t, std::string> &program;
 
     // Helper methods for executing instructions
     void executeInstruction(const std::string &instr);
