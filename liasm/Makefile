@@ -1,16 +1,21 @@
 CC = g++
-CFLAGS = -Wall -std=c++11
+CFLAGS = -Wall -std=c++11 -I includes
+SRCDIR = src
+BINDIR = bin
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
+TARGET = licc
 
-all: scanner parser compiler
+all: $(TARGET)
 
-scanner: scanner.cpp scanner.h
-    $(CC) $(CFLAGS) -o scanner scanner.cpp
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) $^ -o $@
 
-parser: parser.cpp parser.h
-    $(CC) $(CFLAGS) -o parser parser.cpp
+$(BINDIR)/%.o: $(SRCDIR)/%.cpp | $(BINDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-compiler: compiler.cpp compiler.h
-    $(CC) $(CFLAGS) -o compiler compiler.cpp
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
 clean:
-    rm -f scanner parser compiler
+	rm -rf $(BINDIR) $(TARGET)
