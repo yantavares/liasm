@@ -1,13 +1,16 @@
-#include "FirstPassAnalyzer.hpp"
+#include "SecondPassAnalyzer.hpp"
 
-FirstPassAnalyzer::FirstPassAnalyzer(
+SecondPassAnalyzer::SecondPassAnalyzer(
+    std::vector<uint16_t> &RAM,
+    std::vector<uint16_t> &ROM,
     std::unordered_map<std::string, u_int16_t> &labels)
-    : labels(labels)
+    : RAM(RAM), ROM(ROM), labels(labels)
 {
 }
 
-int FirstPassAnalyzer::analyse(std::ifstream &file)
+int SecondPassAnalyzer::analyse(std::ifstream &file)
 {
+
     std::string line, instr, var;
     std::string label;
     u_int16_t address = 0;
@@ -15,6 +18,7 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
     while (getline(file, line))
     {
         std::istringstream iss(line);
+
         if (!(iss >> instr))
         {
             continue; // Empty line or no instruction
@@ -28,16 +32,13 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
     return 0;
 }
 
-void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstream &iss,
-                                           std::string &label, u_int16_t &address)
+void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstream &iss,
+                                            std::string &label, u_int16_t &address)
 {
-    std::string var;
 
     if (instr.back() == ':')
     {
         label = instr.substr(0, instr.size() - 1);
-
-        labels[label] = address;
 
         if (!(iss >> instr))
         {
@@ -47,10 +48,15 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
 
     if (instr == "CONST")
     {
+        u_int16_t value;
+        iss >> value;
+
+        RAM[labels[label]] = value;
         address++;
     }
     else if (instr == "SPACE")
     {
+        RAM[labels[label]] = 0;
         address++;
     }
     else if (instr == "STOP")
@@ -58,30 +64,38 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
         stopFlag = true;
     }
 
+    if (labels.find(instr) != labels.end())
+    {
+        ROM[address] = labels[instr];
+    }
+    else
+    {
+        ROM[address] = getOpcode(instr);
+    }
+
     address++;
+
     while (!stopFlag && iss >> instr)
     {
         if (instr[0] == ';')
         {
             break; // Comment detected, stop processing the line
         }
+
+        if (labels.find(instr) != labels.end())
+        {
+            ROM[address] = labels[instr];
+        }
+        else
+        {
+            ROM[address] = getOpcode(instr);
+        }
         address++;
+        iss >> instr;
     }
 }
 
-void FirstPassAnalyzer::printLabels()
+u_int16_t SecondPassAnalyzer::getOpcode(std::string &inst)
 {
-    std::cout << "Label"
-              << " ->  "
-              << "Address" << std::endl;
-
-    for (auto &kv : labels)
-    {
-        int spacesToAddLabel = 5 - kv.first.size(); // 5 is the size of the string "LABEL"
-        std::string spacesLabel(spacesToAddLabel, ' ');
-
-        std::cout << kv.first << spacesLabel << " ->  " << kv.second << std::endl;
-    }
-
-    std::cout << std::endl;
+    return opcodes[inst];
 }

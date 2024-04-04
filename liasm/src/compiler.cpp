@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "FirstPassAnalyzer.hpp"
-#include "SecondPassExecutor.hpp"
+#include "Executor.hpp"
+#include "SecondPassAnalyzer.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,20 +24,22 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    constexpr size_t MEMORY_SIZE = 65536;      // For a 16-bit address space
-    std::vector<uint16_t> RAM(MEMORY_SIZE);    // Simulated memory -> 2^16 16-bit words
-    std::vector<std::string> ROM(MEMORY_SIZE); // Stores the program token by token
-    // TODO change instructions to uint16_t instead of string
+    constexpr size_t MEMORY_SIZE = 65536;    // For a 16-bit address space
+    std::vector<u_int16_t> RAM(MEMORY_SIZE); // Simulated memory -> 2^16 16-bit words
+    std::vector<u_int16_t> ROM(MEMORY_SIZE); // Stores the program token by token
 
-    std::unordered_map<std::string, u_int16_t> labels; // Labels for jumps
+    std::unordered_map<std::string, u_int16_t> labels; // Labels
 
-    // First pass: builds the label map and stores the lines of the program
-    FirstPassAnalyzer analyzer(RAM, labels, ROM);
+    FirstPassAnalyzer analyzer(labels);
     analyzer.analyse(file);
     analyzer.printLabels();
 
-    // Second pass: executes the program
-    SecondPassExecutor executor(RAM, labels, ROM);
+    file.open(argv[1]);
+
+    SecondPassAnalyzer analyzer2(RAM, ROM, labels);
+    analyzer2.analyse(file);
+
+    Executor executor(RAM, ROM, labels);
     executor.execute();
 
     return 0;
