@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::unordered_map<std::string, u_int16_t> memory;  // Simulated memory
+    constexpr size_t MEMORY_SIZE = 65536;      // For a 16-bit address space
+    std::vector<uint16_t> memory(MEMORY_SIZE); // Simulated memory -> 2^16 16-bit words
+
     std::unordered_map<std::string, u_int16_t> labels;  // Labels for jumps
     std::unordered_map<u_int16_t, std::string> program; // Stores the program line by line
 
@@ -31,6 +33,11 @@ int main(int argc, char *argv[])
     FirstPassAnalyzer analyzer(memory, labels, program);
     analyzer.analyse(file);
     analyzer.printLabels();
+
+    for (const auto &[address, instr] : program)
+    {
+        std::cout << address << ": " << instr << std::endl;
+    }
 
     // Second pass: executes the program
     SecondPassExecutor executor(memory, labels, program);

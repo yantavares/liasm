@@ -1,6 +1,6 @@
 #include "SecondPassExecutor.hpp"
 
-SecondPassExecutor::SecondPassExecutor(std::unordered_map<std::string, u_int16_t> &memory,
+SecondPassExecutor::SecondPassExecutor(std::vector<u_int16_t> &memory,
                                        std::unordered_map<std::string, u_int16_t> &labels,
                                        std::unordered_map<u_int16_t, std::string> &program)
     : memory(memory), labels(labels), program(program) {}
@@ -64,43 +64,43 @@ void SecondPassExecutor::executeInstruction(const std::string &instr)
 void SecondPassExecutor::input(const std::string &variable)
 {
     std::cout << "Enter a value for " << variable << ": ";
-    std::cin >> memory[variable];
+    std::cin >> memory[labels[variable]];
     PC += 2;
 }
 
 void SecondPassExecutor::load(const std::string &variable)
 {
-    ACC = memory[variable];
+    ACC = memory[labels[variable]];
     PC += 2;
 }
 
 void SecondPassExecutor::add(const std::string &variable)
 {
-    ACC += memory[variable];
+    ACC += memory[labels[variable]];
     PC += 2;
 }
 
 void SecondPassExecutor::sub(const std::string &variable)
 {
-    ACC -= memory[variable];
+    ACC -= memory[labels[variable]];
     PC += 2;
 }
 
 void SecondPassExecutor::mult(const std::string &variable)
 {
-    ACC *= memory[variable];
+    ACC *= memory[labels[variable]];
     PC += 2;
 }
 
 void SecondPassExecutor::store(const std::string &variable)
 {
-    memory[variable] = ACC;
+    memory[labels[variable]] = ACC;
     PC += 2;
 }
 
 void SecondPassExecutor::output(const std::string &variable)
 {
-    std::cout << variable << " = " << memory[variable] << std::endl;
+    std::cout << variable << " = " << memory[labels[variable]] << std::endl;
     PC += 2;
 }
 

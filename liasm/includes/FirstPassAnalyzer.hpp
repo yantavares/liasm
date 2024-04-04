@@ -6,12 +6,13 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class FirstPassAnalyzer
 {
 public:
     FirstPassAnalyzer(
-        std::unordered_map<std::string, u_int16_t> &memory,
+        std::vector<uint16_t> &memory,
         std::unordered_map<std::string, u_int16_t> &labels,
         std::unordered_map<u_int16_t, std::string> &program);
 
@@ -19,7 +20,7 @@ public:
     void printLabels();
 
 private:
-    std::unordered_map<std::string, u_int16_t> &memory;
+    std::vector<uint16_t> &memory;
     std::unordered_map<std::string, u_int16_t> &labels;
     std::unordered_map<u_int16_t, std::string> &program;
 

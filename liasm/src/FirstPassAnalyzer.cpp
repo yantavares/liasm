@@ -1,7 +1,7 @@
 #include "FirstPassAnalyzer.hpp"
 
 FirstPassAnalyzer::FirstPassAnalyzer(
-    std::unordered_map<std::string, u_int16_t> &memory,
+    std::vector<uint16_t> &memory,
     std::unordered_map<std::string, u_int16_t> &labels,
     std::unordered_map<u_int16_t, std::string> &program)
     : memory(memory), labels(labels), program(program)
@@ -50,12 +50,12 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
     if (instr == "CONST")
     {
         iss >> var;
-        memory[label] = std::stoi(var);
+        memory[labels[label]] = std::stoi(var);
         address++;
     }
     else if (instr == "SPACE")
     {
-        memory[label] = 0;
+        memory[labels[label]] = 0;
         address++;
     }
     else if (instr == "STOP")
