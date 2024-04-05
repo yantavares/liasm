@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -std=c++14 -I includes
 SRCDIR = src
 BINDIR = bin
-SOURCES = $(wildcard $(SRCDIR)/*.cpp) compiler.cpp
+SOURCES = $(wildcard $(SRCDIR)/*.cpp) main.cpp
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 TARGET = licc
 

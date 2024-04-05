@@ -10,10 +10,10 @@
 #include <bitset>
 #include <memory>
 
-class Executor
+class Assembler
 {
 public:
-    Executor(std::unordered_map<std::string, u_int16_t> labels);
+    Assembler(std::unordered_map<std::string, u_int16_t> labels);
 
     // Executes the program
     int execute();

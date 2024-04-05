@@ -1,6 +1,6 @@
-#include "Executor.hpp"
+#include "Assembler.hpp"
 
-Executor::Executor(std::unordered_map<std::string, u_int16_t> labels)
+Assembler::Assembler(std::unordered_map<std::string, u_int16_t> labels)
     : labels(labels), elementSize(16) // 16 bits per element
 {
 
@@ -17,7 +17,7 @@ Executor::Executor(std::unordered_map<std::string, u_int16_t> labels)
     }
 }
 
-int Executor::execute()
+int Assembler::execute()
 {
     u_int16_t instr;
 
@@ -41,7 +41,7 @@ int Executor::execute()
     return 0;
 }
 
-void Executor::executeInstruction(u_int16_t &instr)
+void Assembler::executeInstruction(u_int16_t &instr)
 {
     if (instr == 0x01)
         addI(readValueFromFile(1, PC + 1)); // ADD
@@ -77,7 +77,7 @@ void Executor::executeInstruction(u_int16_t &instr)
     }
 }
 
-void Executor::inputI(u_int16_t variable)
+void Assembler::inputI(u_int16_t variable)
 {
     u_int16_t value;
     std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
@@ -86,49 +86,49 @@ void Executor::inputI(u_int16_t variable)
     PC += 2;
 }
 
-void Executor::loadI(u_int16_t variable)
+void Assembler::loadI(u_int16_t variable)
 {
     ACC = readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::addI(u_int16_t variable)
+void Assembler::addI(u_int16_t variable)
 {
     ACC += readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::subI(u_int16_t variable)
+void Assembler::subI(u_int16_t variable)
 {
     ACC -= readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::multI(u_int16_t variable)
+void Assembler::multI(u_int16_t variable)
 {
     ACC *= readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::divI(u_int16_t variable)
+void Assembler::divI(u_int16_t variable)
 {
     ACC /= readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::storeI(u_int16_t variable)
+void Assembler::storeI(u_int16_t variable)
 {
     writeValueToFile(0, variable, ACC);
     PC += 2;
 }
 
-void Executor::outputI(u_int16_t variable)
+void Assembler::outputI(u_int16_t variable)
 {
     std::cout << findKeyByValue(variable) << " = " << readValueFromFile(0, variable) << std::endl;
     PC += 2;
 }
 
-void Executor::jumpZI(u_int16_t addr)
+void Assembler::jumpZI(u_int16_t addr)
 {
     if (ACC == 0)
     {
@@ -138,7 +138,7 @@ void Executor::jumpZI(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jumpPI(u_int16_t addr)
+void Assembler::jumpPI(u_int16_t addr)
 {
     if (ACC > 0)
     {
@@ -148,7 +148,7 @@ void Executor::jumpPI(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jumpNI(u_int16_t addr)
+void Assembler::jumpNI(u_int16_t addr)
 {
     if (ACC < 0)
     {
@@ -158,18 +158,18 @@ void Executor::jumpNI(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jumpI(u_int16_t addr)
+void Assembler::jumpI(u_int16_t addr)
 {
     PC = addr;
 }
 
-void Executor::copyI(u_int16_t source, u_int16_t dest)
+void Assembler::copyI(u_int16_t source, u_int16_t dest)
 {
     writeValueToFile(0, dest, readValueFromFile(0, source)); // 0 -> RAM
     PC += 3;
 }
 
-std::string Executor::findKeyByValue(u_int16_t &addr)
+std::string Assembler::findKeyByValue(u_int16_t &addr)
 {
     for (const auto &pair : labels)
     {
@@ -181,7 +181,7 @@ std::string Executor::findKeyByValue(u_int16_t &addr)
     return ""; // Return an empty string if no key is found
 }
 
-u_int16_t Executor::readValueFromFile(u_int16_t type, u_int16_t index)
+u_int16_t Assembler::readValueFromFile(u_int16_t type, u_int16_t index)
 {
     u_int16_t value = 0;
     std::string binaryString;
@@ -211,7 +211,7 @@ u_int16_t Executor::readValueFromFile(u_int16_t type, u_int16_t index)
     return value;
 }
 
-void Executor::writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value)
+void Assembler::writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value)
 {
     // Convert the value to a binary string
     std::string binaryString = std::bitset<16>(value).to_string();

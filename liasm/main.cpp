@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "FirstPassAnalyzer.hpp"
-#include "Executor.hpp"
+#include "Assembler.hpp"
 #include "SecondPassAnalyzer.hpp"
 
 int main(int argc, char *argv[])
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     SecondPassAnalyzer analyzer2(labels);
     analyzer2.analyse(file);
 
-    Executor executor(labels);
+    Assembler executor(labels);
     executor.execute();
 
     return 0;
