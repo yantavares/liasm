@@ -43,6 +43,7 @@ Although simple, `liasm` can be considered a Turing-complete language. It has a 
 | INPUT    | 12             | 2            | mem(OP) <- input       |
 | OUTPUT   | 13             | 2            | output <- mem(OP)      |
 | STOP     | 14             | 1            | Suspends execution     |
+| THROW    | 15             | 1            | Throws an exception    |
 
 Directives:
 

@@ -30,7 +30,7 @@ int Assembler::execute()
             break;
         }
 
-        if (instr > 0x0E || instr < 0x01)
+        if (instr > 0x0F || instr < 0x01)
         {
             std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
             throw std::runtime_error("Execution failed due to invalid instruction.");
@@ -69,7 +69,8 @@ void Assembler::executeInstruction(u_int16_t &instr)
         inputI(readValueFromFile(1, PC + 1)); // INPUT
     else if (instr == 0x0D)
         outputI(readValueFromFile(1, PC + 1)); // OUTPUT
-
+    else if (instr == 0x0F)
+        throwI(); // THROW
     else
     {
         std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
@@ -167,6 +168,13 @@ void Assembler::copyI(u_int16_t source, u_int16_t dest)
 {
     writeValueToFile(0, dest, readValueFromFile(0, source)); // 0 -> RAM
     PC += 3;
+}
+
+void Assembler::throwI()
+{
+
+    std::cerr << "Exception thrown at address " << PC << std::endl; // THROW
+    throw std::runtime_error("Exception thrown by the program.");
 }
 
 std::string Assembler::findKeyByValue(u_int16_t &addr)

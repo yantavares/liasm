@@ -41,6 +41,7 @@ private:
     void jumpNI(u_int16_t label);
     void jumpI(u_int16_t label);
     void copyI(u_int16_t source, u_int16_t dest);
+    void throwI();
 
     const std::streamsize elementSize;
     u_int16_t readValueFromFile(u_int16_t type, u_int16_t index);

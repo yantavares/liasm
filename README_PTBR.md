@@ -45,6 +45,7 @@ Embora simples, `liasm` pode ser considerada uma linguagem Turing completa. Ela 
 | INPUT     | 12              | 2                  | mem(OP) <- entrada      |
 | OUTPUT    | 13              | 2                  | saída <- mem(OP)        |
 | STOP      | 14              | 1                  | Suspende a execução     |
+| THROW     | 15              | 1                  | Lança uma exceção       |
 
 Diretivas:
 

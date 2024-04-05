@@ -65,7 +65,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         writeValueToFile(0, labels[label], 0); // Write to RAM
         address++;
     }
-    else if (instr == "STOP")
+    else if (instr == "STOP" || instr == "THROW")
     {
         stopFlag = true;
     }

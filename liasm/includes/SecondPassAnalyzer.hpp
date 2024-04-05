@@ -45,7 +45,9 @@ private:
         {"STORE", 0x0B},
         {"INPUT", 0x0C},
         {"OUTPUT", 0x0D},
-        {"STOP", 0x0E}};
+        {"STOP", 0x0E},
+        {"THROW", 0x0F},
+    };
 
     u_int16_t elementSize;
 

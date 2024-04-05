@@ -22,14 +22,12 @@ public:
 private:
     std::unordered_map<std::string, u_int16_t> &labels;
 
-    bool stopFlag = false;
-
     void scanIntruction(std::string &instr, std::istringstream &iss,
                         std::string &label, u_int16_t &address);
 
     std::vector<std::string> reservedWords{
         "ADD", "SUB", "MUL", "DIV", "JMP", "JMPN", "JMPP", "JMPZ",
-        "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP", "CONST", "SPACE"};
+        "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP", "CONST", "SPACE", "THROW"};
 };
 
 #endif // FIRSTPASSANALYZER_HPP

@@ -76,14 +76,13 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
         }
         address++;
     }
-    else if (instr == "STOP")
+    else if (instr == "STOP" || instr == "THROW")
     {
         if (iss >> var && var[0] != ';')
         {
-            throw std::runtime_error("STOP instruction must not have a value.");
+            throw std::runtime_error("STOP and THROW instructions must not have a value.");
             return;
         }
-        stopFlag = true;
     }
     else
     {
