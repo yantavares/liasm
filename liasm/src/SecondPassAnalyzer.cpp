@@ -1,12 +1,19 @@
 #include "SecondPassAnalyzer.hpp"
 
-SecondPassAnalyzer::SecondPassAnalyzer(
-
-    std::unordered_map<std::string, u_int16_t> &labels)
+SecondPassAnalyzer::SecondPassAnalyzer(std::unordered_map<std::string, uint16_t> &labels)
     : labels(labels), elementSize(16) // 16 bits per element
 {
-    RAM = new std::fstream("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
-    ROM = new std::fstream("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    RAM = std::make_unique<std::fstream>("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    ROM = std::make_unique<std::fstream>("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
+
+    if (!RAM->is_open())
+    {
+        throw std::runtime_error("Failed to open RAM.txt");
+    }
+    if (!ROM->is_open())
+    {
+        throw std::runtime_error("Failed to open ROM.txt");
+    }
 }
 
 int SecondPassAnalyzer::analyse(std::ifstream &file)

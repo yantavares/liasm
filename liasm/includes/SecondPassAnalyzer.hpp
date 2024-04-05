@@ -9,6 +9,7 @@
 #include <vector>
 #include <fstream>
 #include <bitset>
+#include <memory>
 
 class SecondPassAnalyzer
 {
@@ -48,8 +49,8 @@ private:
     u_int16_t elementSize;
 
 protected:
-    std::fstream *RAM;
-    std::fstream *ROM;
+    std::unique_ptr<std::fstream> RAM;
+    std::unique_ptr<std::fstream> ROM;
 };
 
 #endif // SECONDPASSANALYZER_HPP

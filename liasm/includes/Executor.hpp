@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include <bitset>
+#include <memory>
 
 class Executor
 {
@@ -44,8 +45,8 @@ private:
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
 protected:
-    std::fstream *RAM;
-    std::fstream *ROM;
+    std::unique_ptr<std::fstream> RAM;
+    std::unique_ptr<std::fstream> ROM;
 };
 
 #endif // SECONDPASSEXECUTOR_HPP
