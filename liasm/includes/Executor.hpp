@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <bitset>
 
 class Executor
 {
@@ -20,8 +21,6 @@ private:
     u_int16_t ACC = 0; // Accumulator
     u_int16_t PC = 0;  // Program Counter
 
-    std::vector<u_int16_t> &RAM;
-    std::vector<u_int16_t> &ROM;
     std::unordered_map<std::string, u_int16_t> labels;
 
     // Helper methods for executing instructions
@@ -40,7 +39,7 @@ private:
     void jumpN(u_int16_t label);
     void jump(u_int16_t label);
 
-    u_int16_t elementSize;
+    const std::streamsize elementSize;
     u_int16_t readValueFromFile(u_int16_t type, u_int16_t index);
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 

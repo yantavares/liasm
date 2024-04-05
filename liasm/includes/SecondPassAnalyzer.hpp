@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include <fstream>
+#include <bitset>
 
 class SecondPassAnalyzer
 {

@@ -1,12 +1,11 @@
 #include "Executor.hpp"
 
 Executor::Executor(std::unordered_map<std::string, u_int16_t> labels)
-    : labels(labels)
+    : labels(labels), elementSize(16) // 16 bits per element
 {
-    const std::streamsize elementSize = sizeof(u_int16_t);
 
-    RAM = new std::fstream("./RAM.txt", std::ios::out | std::ios::binary | std::ios::ate);
-    ROM = new std::fstream("./ROM.txt", std::ios::out | std::ios::binary | std::ios::ate);
+    RAM = new std::fstream("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    ROM = new std::fstream("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
 }
 
 int Executor::execute()
@@ -157,37 +156,53 @@ std::string Executor::findKeyByValue(u_int16_t &addr)
 
 u_int16_t Executor::readValueFromFile(u_int16_t type, u_int16_t index)
 {
-    u_int16_t value;
-    std::streampos pos = index * elementSize;
+    u_int16_t value = 0;
+    std::string binaryString;
+
+    // Calculate the position in the file, assuming each line is 17 characters (16 bits + newline)
+    std::streampos pos = index * (elementSize + 1); // +1 for the newline character
 
     switch (type)
     {
     case 0:
         RAM->seekg(pos);
-        RAM->read(reinterpret_cast<char *>(&value), elementSize);
+        std::getline(*RAM, binaryString); // Read the line into the string
         break;
+
     case 1:
         ROM->seekg(pos);
-        ROM->read(reinterpret_cast<char *>(&value), elementSize);
+        std::getline(*ROM, binaryString); // Read the line into the string
         break;
     }
+
+    // Convert the binary string back to a uint16_t value
+    if (!binaryString.empty())
+    {
+        value = static_cast<u_int16_t>(std::bitset<16>(binaryString).to_ulong());
+    }
+
     return value;
 }
 
 void Executor::writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value)
 {
+    // Convert the value to a binary string
+    std::string binaryString = std::bitset<16>(value).to_string();
+
+    // Calculate the position in the file.
+    // Note: This calculation assumes each line in the file is 16 characters long plus a newline character.
+    std::streampos pos = index * (elementSize + 1); // +1 for the newline character
+
     switch (type)
     {
     case 0:
-        std::streampos pos = index * elementSize;
         RAM->seekp(pos);
-        RAM->write(reinterpret_cast<const char *>(&value), elementSize);
+        *RAM << binaryString << std::endl; // Write the binary string with a newline
         break;
 
     case 1:
-        std::streampos pos = index * elementSize;
         ROM->seekp(pos);
-        ROM->write(reinterpret_cast<const char *>(&value), elementSize);
+        *ROM << binaryString << std::endl; // Write the binary string with a newline
         break;
     }
 }

@@ -24,8 +24,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    constexpr size_t MEMORY_SIZE = 65536; // For a 16-bit address space
-
     std::unordered_map<std::string, u_int16_t> labels; // Labels
 
     FirstPassAnalyzer analyzer(labels);
