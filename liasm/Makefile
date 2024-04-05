@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -std=c++14 -I includes
 SRCDIR = src
 BINDIR = bin
-SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+SOURCES = $(wildcard $(SRCDIR)/*.cpp) compiler.cpp
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 TARGET = licc
 
@@ -21,6 +21,9 @@ $(BINDIR)/%.o: $(SRCDIR)/%.cpp | $(BINDIR)
 
 $(BINDIR):
 	mkdir -p $(BINDIR)
+
+run: all
+	./$(TARGET) $(ARGS)
 
 clean:
 	rm -rf $(BINDIR) $(TARGET)
