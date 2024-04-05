@@ -31,7 +31,7 @@ int SecondPassAnalyzer::analyse(std::ifstream &file)
             continue; // Empty line or no instruction
         }
 
-        processInstruction(instr, iss, label, address);
+        parseInstruction(instr, iss, label, address);
     }
 
     file.close();
@@ -39,8 +39,8 @@ int SecondPassAnalyzer::analyse(std::ifstream &file)
     return 0;
 }
 
-void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstream &iss,
-                                            std::string &label, u_int16_t &address)
+void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream &iss,
+                                          std::string &label, u_int16_t &address)
 {
     if (instr.back() == ':')
     {

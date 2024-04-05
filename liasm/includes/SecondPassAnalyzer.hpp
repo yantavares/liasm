@@ -24,8 +24,8 @@ private:
 
     bool stopFlag = false;
 
-    void processInstruction(std::string &instr, std::istringstream &iss,
-                            std::string &label, u_int16_t &address);
+    void parseInstruction(std::string &instr, std::istringstream &iss,
+                          std::string &label, u_int16_t &address);
 
     u_int16_t getOpcode(std::string &instr);
 

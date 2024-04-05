@@ -20,7 +20,7 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
             continue; // Empty line or no instruction
         }
 
-        processInstruction(instr, iss, label, address);
+        scanIntruction(instr, iss, label, address);
     }
 
     file.close();
@@ -28,8 +28,8 @@ int FirstPassAnalyzer::analyse(std::ifstream &file)
     return 0;
 }
 
-void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstream &iss,
-                                           std::string &label, u_int16_t &address)
+void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &iss,
+                                       std::string &label, u_int16_t &address)
 {
     std::string var;
 
@@ -37,12 +37,22 @@ void FirstPassAnalyzer::processInstruction(std::string &instr, std::istringstrea
     {
         label = instr.substr(0, instr.size() - 1);
 
+        if (!isLabelValid(label))
+        {
+            return;
+        }
+
         labels[label] = address;
 
         if (!(iss >> instr))
         {
             return;
         }
+    }
+
+    if (!isInstrValid(instr))
+    {
+        return;
     }
 
     if (instr == "CONST")
@@ -84,4 +94,37 @@ void FirstPassAnalyzer::printLabels()
     }
 
     std::cout << std::endl;
+}
+
+bool FirstPassAnalyzer::isLabelValid(std::string &label)
+{
+    if (labels.find(label) != labels.end())
+    {
+        std::cerr << "Label " << label << " already exists." << std::endl;
+        return false;
+    }
+
+    if (!isalpha(label[0]))
+    {
+        std::cerr << "Label " << label << " must start with a letter." << std::endl;
+        return false;
+    }
+
+    if (std::find(reservedWords.begin(), reservedWords.end(), label) != reservedWords.end())
+    {
+        std::cerr << "Label " << label << " is a reserved word." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool FirstPassAnalyzer::isInstrValid(std::string &instr)
+{
+    if (std::find(reservedWords.begin(), reservedWords.end(), instr) == reservedWords.end())
+    {
+        std::cerr << "Instruction " << instr << " is not valid." << std::endl;
+    }
+
+    return true;
 }
