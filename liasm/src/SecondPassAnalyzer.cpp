@@ -132,7 +132,7 @@ void SecondPassAnalyzer::writeValueToFile(u_int16_t type, u_int16_t index, u_int
     }
 }
 
-void SecondPassAnalyzer::writeSignedConstantToMemory(u_int16_t &index, int16_t &value)
+void SecondPassAnalyzer::writeSignedConstantToMemory(u_int16_t index, int16_t value)
 {
     // Convert the value to a binary string
     std::string binaryString = std::bitset<16>(value).to_string();

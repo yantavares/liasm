@@ -131,37 +131,37 @@ void Assembler::inputI(u_int16_t variable)
     u_int16_t value;
     std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
     std::cin >> value;
-    writeValueToFile(0, variable, value);
+    writeValueToFile(0, variable, value); // 0 -> RAM
     PC += 2;
 }
 
 void Assembler::loadI(u_int16_t variable)
 {
-    ACC = readValueFromFile(0, variable);
+    ACC = readSignedValueFromFile(0, variable);
     PC += 2;
 }
 
 void Assembler::addI(u_int16_t variable)
 {
-    ACC += readValueFromFile(0, variable);
+    ACC += readSignedValueFromFile(0, variable);
     PC += 2;
 }
 
 void Assembler::subI(u_int16_t variable)
 {
-    ACC -= readValueFromFile(0, variable);
+    ACC -= readSignedValueFromFile(0, variable);
     PC += 2;
 }
 
 void Assembler::multI(u_int16_t variable)
 {
-    ACC *= readValueFromFile(0, variable);
+    ACC *= readSignedValueFromFile(0, variable);
     PC += 2;
 }
 
 void Assembler::divI(u_int16_t variable)
 {
-    ACC /= readValueFromFile(0, variable);
+    ACC /= readSignedValueFromFile(0, variable);
     PC += 2;
 }
 
@@ -173,7 +173,7 @@ void Assembler::storeI(u_int16_t variable)
 
 void Assembler::outputI(u_int16_t variable)
 {
-    std::cout << findKeyByValue(variable) << " = " << readValueFromFile(0, variable) << std::endl;
+    std::cout << findKeyByValue(variable) << " = " << readSignedValueFromFile(0, variable) << std::endl;
     PC += 2;
 }
 
@@ -214,7 +214,7 @@ void Assembler::jumpI(u_int16_t addr)
 
 void Assembler::copyI(u_int16_t source, u_int16_t dest)
 {
-    writeValueToFile(0, dest, readValueFromFile(0, source)); // 0 -> RAM
+    writeValueToFile(0, dest, readSignedValueFromFile(0, source)); // 0 -> RAM
     PC += 3;
 }
 
@@ -267,6 +267,36 @@ u_int16_t Assembler::readValueFromFile(u_int16_t type, u_int16_t index)
     if (!binaryString.empty())
     {
         value = static_cast<u_int16_t>(std::bitset<16>(binaryString).to_ulong());
+    }
+
+    return value;
+}
+
+int16_t Assembler::readSignedValueFromFile(u_int16_t type, u_int16_t index)
+{
+    int16_t value = 0;
+    std::string binaryString;
+
+    // Calculate the position in the file, assuming each line is 17 characters (16 bits + newline)
+    std::streampos pos = index * (elementSize + 1); // +1 for the newline character
+
+    switch (type)
+    {
+    case 0:
+        RAM->seekg(pos);
+        std::getline(*RAM, binaryString); // Read the line into the string
+        break;
+
+    case 1:
+        ROM->seekg(pos);
+        std::getline(*ROM, binaryString); // Read the line into the string
+        break;
+    }
+
+    // Convert the binary string back to a int16_t value
+    if (!binaryString.empty())
+    {
+        value = static_cast<int16_t>(std::bitset<16>(binaryString).to_ulong());
     }
 
     return value;

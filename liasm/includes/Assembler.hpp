@@ -46,6 +46,7 @@ private:
 
     const std::streamsize elementSize;
     u_int16_t readValueFromFile(u_int16_t type, u_int16_t index);
+    int16_t readSignedValueFromFile(u_int16_t type, u_int16_t index);
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
 protected:

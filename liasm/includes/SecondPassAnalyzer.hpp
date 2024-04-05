@@ -26,10 +26,10 @@ private:
                           std::string &label, u_int16_t &address);
 
     int16_t parseValue(std::string &value);
-    void SecondPassAnalyzer::writeSignedConstantToMemory(u_int16_t &index, int16_t &value);
 
     u_int16_t getOpcode(std::string &instr);
 
+    void writeSignedConstantToMemory(u_int16_t index, int16_t value);
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
     std::unordered_map<std::string, u_int16_t> opcodes{
