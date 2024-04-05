@@ -5,8 +5,8 @@ SecondPassAnalyzer::SecondPassAnalyzer(
     std::unordered_map<std::string, u_int16_t> &labels)
     : labels(labels), elementSize(16) // 16 bits per element
 {
-    RAM = new std::fstream("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
-    ROM = new std::fstream("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
+    RAM = new std::fstream("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    ROM = new std::fstream("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
 }
 
 int SecondPassAnalyzer::analyse(std::ifstream &file)
