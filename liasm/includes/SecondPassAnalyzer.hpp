@@ -48,6 +48,7 @@ private:
         {"OUTPUT", 0x0D},
         {"STOP", 0x0E},
         {"THROW", 0x0F},
+        {"NOP", 0x10},
     };
 
     u_int16_t elementSize;

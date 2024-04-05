@@ -25,7 +25,7 @@ int Assembler::execute()
     {
         instr = readValueFromFile(1, PC); // 1 -> ROM
 
-        if (instr > 0x0F || instr < 0x01)
+        if (instr > 0x10 || instr < 0x01)
         {
             std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
             throw std::runtime_error("Execution failed due to invalid instruction.");
@@ -113,6 +113,11 @@ u_int16_t Assembler::executeInstruction(u_int16_t &instr)
     {
         throwI(); // THROW
         return 1;
+    }
+    else if (instr == 0x10)
+    {
+        PC += 1; // NOP
+        return 0;
     }
     else
     {

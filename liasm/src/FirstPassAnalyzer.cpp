@@ -73,7 +73,7 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
             return;
         }
     }
-    else if (instr == "STOP" || instr == "THROW")
+    else if (instr == "STOP" || instr == "THROW" || instr == "NOP")
     {
         if (iss >> var && var[0] != ';')
         {
@@ -116,6 +116,11 @@ void FirstPassAnalyzer::printLabels()
 
 bool FirstPassAnalyzer::isLabelValid(std::string &label, bool checkExits)
 {
+    if (label[0] == ';')
+    {
+        return false;
+    }
+
     if (checkExits)
     {
         if (labels.find(label) != labels.end())

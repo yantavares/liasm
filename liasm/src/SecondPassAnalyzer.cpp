@@ -64,13 +64,13 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
         int16_t parsedValue = parseValue(value);
         writeSignedConstantToMemory(labels[label], parsedValue); // Write to RAM
-        address++;
+        writeValueToFile(1, address++, 0x10);                    // Write NOP to ROM
         return;
     }
     else if (instr == "SPACE")
     {
         writeValueToFile(0, labels[label], 0); // Write to RAM
-        address++;
+        writeValueToFile(1, address++, 0x10);  // Write NOP to ROM
         return;
     }
 

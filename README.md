@@ -121,10 +121,10 @@ After compiling the assembler:
 
 #### Direct Execution with `make run`
 
-- **To compile the assembler and execute directly**, replace `"File path"` with the path of your `.asm` file:
+- **To compile the assembler and execute directly**, replace `<File path>` with the path of your `.asm` file:
 
   ```bash
-  make run FILE="File path"
+  make run FILE=<File path>
   ```
 
 ### Running Tests
