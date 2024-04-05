@@ -23,7 +23,7 @@ $(BINDIR):
 	mkdir -p $(BINDIR)
 
 run: all
-	./$(TARGET) $(ARGS)
+	./$(TARGET) $(FILE)
 
 clean:
 	rm -rf $(BINDIR) $(TARGET)
