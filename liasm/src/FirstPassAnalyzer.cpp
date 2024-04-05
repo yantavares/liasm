@@ -145,6 +145,11 @@ bool FirstPassAnalyzer::isLabelValid(std::string &label, bool checkExits)
 
 bool FirstPassAnalyzer::isInstrValid(std::string &instr)
 {
+    if (instr[0] == ';')
+    {
+        return false;
+    }
+
     if (std::find(reservedWords.begin(), reservedWords.end(), instr) == reservedWords.end())
     {
         throw std::runtime_error("Instruction " + instr + " is not valid.");

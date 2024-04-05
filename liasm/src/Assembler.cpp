@@ -36,41 +36,89 @@ int Assembler::execute()
             throw std::runtime_error("Execution failed due to invalid instruction.");
         }
 
-        executeInstruction(instr);
+        if (executeInstruction(instr) == 1)
+            break;
     }
     return 0;
 }
 
-void Assembler::executeInstruction(u_int16_t &instr)
+u_int16_t Assembler::executeInstruction(u_int16_t &instr)
 {
     if (instr == 0x01)
+    {
         addI(readValueFromFile(1, PC + 1)); // ADD
+        return 0;
+    }
     else if (instr == 0x02)
+    {
         subI(readValueFromFile(1, PC + 1)); // SUB
+        return 0;
+    }
     else if (instr == 0x03)
+    {
         multI(readValueFromFile(1, PC + 1)); // MUL
+        return 0;
+    }
     else if (instr == 0x04)
+    {
         divI(readValueFromFile(1, PC + 1)); // DIV
+        return 0;
+    }
     else if (instr == 0x05)
+    {
         jumpI(readValueFromFile(1, PC + 1)); // JMP
+        return 0;
+    }
     else if (instr == 0x06)
+    {
         jumpNI(readValueFromFile(1, PC + 1)); // JMPN
+        return 0;
+    }
     else if (instr == 0x07)
+    {
         jumpPI(readValueFromFile(1, PC + 1)); // JMPP
+        return 0;
+    }
     else if (instr == 0x08)
+    {
         jumpZI(readValueFromFile(1, PC + 1)); // JMPZ
+        return 0;
+    }
     else if (instr == 0x09)
+    {
         copyI(readValueFromFile(1, PC + 1), readValueFromFile(1, PC + 2)); // COPY
+        return 0;
+    }
     else if (instr == 0x0A)
+    {
         loadI(readValueFromFile(1, PC + 1)); // LOAD
+        return 0;
+    }
     else if (instr == 0x0B)
+    {
         storeI(readValueFromFile(1, PC + 1)); // STORE
+        return 0;
+    }
     else if (instr == 0x0C)
+    {
         inputI(readValueFromFile(1, PC + 1)); // INPUT
+        return 0;
+    }
     else if (instr == 0x0D)
+    {
         outputI(readValueFromFile(1, PC + 1)); // OUTPUT
+        return 0;
+    }
+    else if (instr == 0x0E)
+    {
+        stopI(); // STOP
+        return 1;
+    }
     else if (instr == 0x0F)
+    {
         throwI(); // THROW
+        return 1;
+    }
     else
     {
         std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
@@ -168,6 +216,11 @@ void Assembler::copyI(u_int16_t source, u_int16_t dest)
 {
     writeValueToFile(0, dest, readValueFromFile(0, source)); // 0 -> RAM
     PC += 3;
+}
+
+void Assembler::stopI()
+{
+    std::cout << "\nProgram execution stopped." << std::endl;
 }
 
 void Assembler::throwI()

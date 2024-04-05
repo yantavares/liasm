@@ -25,7 +25,7 @@ private:
     std::unordered_map<std::string, u_int16_t> labels;
 
     // Helper methods for executing instructions
-    void executeInstruction(u_int16_t &instr);
+    u_int16_t executeInstruction(u_int16_t &instr);
     std::string findKeyByValue(u_int16_t &addr);
 
     void inputI(u_int16_t variable);
@@ -41,6 +41,7 @@ private:
     void jumpNI(u_int16_t label);
     void jumpI(u_int16_t label);
     void copyI(u_int16_t source, u_int16_t dest);
+    void stopI();
     void throwI();
 
     const std::streamsize elementSize;

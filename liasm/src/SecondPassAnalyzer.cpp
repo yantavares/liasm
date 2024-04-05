@@ -52,6 +52,11 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         }
     }
 
+    if (instr[0] == ';')
+    {
+        return; // Comment detected, stop processing the line
+    }
+
     if (instr == "CONST")
     {
         u_int16_t value;
@@ -59,15 +64,13 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
         writeValueToFile(0, labels[label], value); // Write to RAM
         address++;
+        return;
     }
     else if (instr == "SPACE")
     {
         writeValueToFile(0, labels[label], 0); // Write to RAM
         address++;
-    }
-    else if (instr == "STOP" || instr == "THROW")
-    {
-        stopFlag = true;
+        return;
     }
 
     if (labels.find(instr) != labels.end())
@@ -81,7 +84,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
     address++;
 
-    while (!stopFlag && iss >> instr)
+    while (iss >> instr)
     {
         if (instr[0] == ';')
         {

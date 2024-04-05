@@ -5,11 +5,14 @@ ADD     N2      ; Soma está no acumulador
 STORE   N3      ; Coloca soma N1+N2 em N3
 LOAD    FINAL
 SUB     N3
+
+; Testa se o programa ignora linhas vazias e comentários
+
 JMPZ    OK
 THROW
 OK:     STOP            ; Termina a execução do programa
 N1:     CONST 20   
-N2:     CONST 22
-FINAL:  CONST 42
+N2:     CONST 64
+FINAL:  CONST 84
 N3:     SPACE   ; Reserva espaço para o resultado
 

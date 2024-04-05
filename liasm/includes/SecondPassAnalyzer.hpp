@@ -22,8 +22,6 @@ public:
 private:
     std::unordered_map<std::string, u_int16_t> &labels;
 
-    bool stopFlag = false;
-
     void parseInstruction(std::string &instr, std::istringstream &iss,
                           std::string &label, u_int16_t &address);
 
