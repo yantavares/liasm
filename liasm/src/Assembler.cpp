@@ -23,12 +23,7 @@ int Assembler::execute()
 
     while (true)
     {
-        instr = readValueFromFile(1, PC);
-
-        if (instr == 0x0E) // STOP
-        {
-            break;
-        }
+        instr = readValueFromFile(1, PC); // 1 -> ROM
 
         if (instr > 0x0F || instr < 0x01)
         {

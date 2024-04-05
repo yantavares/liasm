@@ -64,8 +64,6 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
             throw std::runtime_error("CONST instruction must have a value.");
             return;
         }
-
-        address++;
     }
     else if (instr == "SPACE")
     {
@@ -74,7 +72,6 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
             throw std::runtime_error("SPACE instruction must not have a value.");
             return;
         }
-        address++;
     }
     else if (instr == "STOP" || instr == "THROW")
     {

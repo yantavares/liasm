@@ -10,9 +10,11 @@ SUB     N3
 
 JMPZ    OK
 THROW
-OK:     STOP            ; Termina a execução do programa
 N1:     CONST 20   
 N2:     CONST -64
 FINAL:  CONST -44
 N3:     SPACE            ; Reserva espaço para o resultado
 
+; Testa labels em lugares difrenetes
+
+OK:     STOP            ; Termina a execução do programa

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     FirstPassAnalyzer analyzer(labels);
     analyzer.analyse(file);
-    // analyzer.printLabels();
+    analyzer.printLabels();
 
     file.open(argv[1]);
 
