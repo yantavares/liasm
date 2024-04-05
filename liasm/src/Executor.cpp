@@ -32,7 +32,8 @@ int Executor::execute()
 
         if (instr > 0x0C || instr < 0x00)
         {
-            std::cerr << "Invalid instruction at address " << PC << std::endl;
+            std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
+            throw std::runtime_error("Execution failed due to invalid instruction.");
         }
 
         executeInstruction(instr);
