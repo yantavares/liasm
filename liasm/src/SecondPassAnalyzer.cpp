@@ -59,10 +59,11 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
     if (instr == "CONST")
     {
-        u_int16_t value;
+        std::string value;
         iss >> value;
 
-        writeValueToFile(0, labels[label], value); // Write to RAM
+        int16_t parsedValue = parseValue(value);
+        writeSignedConstantToMemory(labels[label], parsedValue); // Write to RAM
         address++;
         return;
     }
@@ -129,4 +130,55 @@ void SecondPassAnalyzer::writeValueToFile(u_int16_t type, u_int16_t index, u_int
         *ROM << binaryString << std::endl; // Write the binary string with a newline
         break;
     }
+}
+
+void SecondPassAnalyzer::writeSignedConstantToMemory(u_int16_t &index, int16_t &value)
+{
+    // Convert the value to a binary string
+    std::string binaryString = std::bitset<16>(value).to_string();
+
+    // Calculate the position in the file.
+    // Note: This calculation assumes each line in the file is 16 characters long plus a newline character.
+    std::streampos pos = index * (elementSize + 1); // +1 for the newline character
+
+    RAM->seekp(pos);
+    *RAM << binaryString << std::endl; // Write the binary string with a newline
+}
+
+int16_t SecondPassAnalyzer::parseValue(std::string &value)
+{
+    int16_t parsedValue;
+
+    if (value[0] == '-') // Negative value
+    {
+        try
+        {
+            parsedValue = -1 * std::stoi(value.substr(1));
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Invalid value " << value << '\n';
+            throw std::runtime_error("Invalid value for CONST - must be an integer.");
+        }
+    }
+
+    else
+    {
+        try
+        {
+            parsedValue = std::stoi(value);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Invalid value " << value << '\n';
+            throw std::runtime_error("Invalid value for CONST - must be an integer.");
+        }
+    }
+
+    if (parsedValue > 32767)
+    {
+        throw std::runtime_error("Value out of range.");
+    }
+
+    return parsedValue;
 }

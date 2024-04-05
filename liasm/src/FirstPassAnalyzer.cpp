@@ -59,7 +59,7 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
 
     if (instr == "CONST")
     {
-        if (!(iss >> var) || !std::all_of(var.begin(), var.end(), ::isdigit))
+        if (!(iss >> var))
         {
             throw std::runtime_error("CONST instruction must have a value.");
             return;
