@@ -7,19 +7,17 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <fstream>
 
 class SecondPassAnalyzer
 {
 public:
-    SecondPassAnalyzer(std::vector<u_int16_t> &RAM,
-                       std::vector<u_int16_t> &ROM,
-                       std::unordered_map<std::string, u_int16_t> &labels);
+    SecondPassAnalyzer(
+        std::unordered_map<std::string, u_int16_t> &labels);
 
     int analyse(std::ifstream &file);
 
 private:
-    std::vector<u_int16_t> &RAM;
-    std::vector<u_int16_t> &ROM;
     std::unordered_map<std::string, u_int16_t> &labels;
 
     bool stopFlag = false;
@@ -28,6 +26,8 @@ private:
                             std::string &label, u_int16_t &address);
 
     u_int16_t getOpcode(std::string &instr);
+
+    void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
     std::unordered_map<std::string, u_int16_t> opcodes{
         {"STOP", 0x00},
@@ -43,6 +43,12 @@ private:
         {"JUMPN", 0x0A},
         {"JUMP", 0x0B},
     };
+
+    u_int16_t elementSize;
+
+protected:
+    std::fstream *RAM;
+    std::fstream *ROM;
 };
 
 #endif // SECONDPASSANALYZER_HPP

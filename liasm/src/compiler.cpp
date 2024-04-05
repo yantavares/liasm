@@ -24,9 +24,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    constexpr size_t MEMORY_SIZE = 65536;    // For a 16-bit address space
-    std::vector<u_int16_t> RAM(MEMORY_SIZE); // Simulated memory -> 2^16 16-bit words
-    std::vector<u_int16_t> ROM(MEMORY_SIZE); // Stores the program token by token
+    constexpr size_t MEMORY_SIZE = 65536; // For a 16-bit address space
 
     std::unordered_map<std::string, u_int16_t> labels; // Labels
 
@@ -36,10 +34,10 @@ int main(int argc, char *argv[])
 
     file.open(argv[1]);
 
-    SecondPassAnalyzer analyzer2(RAM, ROM, labels);
+    SecondPassAnalyzer analyzer2(labels);
     analyzer2.analyse(file);
 
-    Executor executor(RAM, ROM, labels);
+    Executor executor(labels);
     executor.execute();
 
     return 0;

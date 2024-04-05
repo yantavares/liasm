@@ -1,11 +1,18 @@
 #include "SecondPassAnalyzer.hpp"
 
 SecondPassAnalyzer::SecondPassAnalyzer(
-    std::vector<uint16_t> &RAM,
-    std::vector<uint16_t> &ROM,
+
     std::unordered_map<std::string, u_int16_t> &labels)
-    : RAM(RAM), ROM(ROM), labels(labels)
+    : labels(labels)
 {
+    const std::streamsize elementSize = sizeof(uint16_t);
+    this->elementSize = elementSize;
+
+    RAM = new std::fstream("./RAM.txt", std::ios::out | std::ios::binary | std::ios::ate);
+    this->RAM = RAM;
+
+    ROM = new std::fstream("./ROM.txt", std::ios::out | std::ios::binary | std::ios::ate);
+    this->ROM = ROM;
 }
 
 int SecondPassAnalyzer::analyse(std::ifstream &file)
@@ -51,12 +58,12 @@ void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstre
         u_int16_t value;
         iss >> value;
 
-        RAM[labels[label]] = value;
+        writeValueToFile(0, labels[label], value); // Write to RAM
         address++;
     }
     else if (instr == "SPACE")
     {
-        RAM[labels[label]] = 0;
+        writeValueToFile(0, labels[label], 0); // Write to RAM
         address++;
     }
     else if (instr == "STOP")
@@ -66,11 +73,11 @@ void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstre
 
     if (labels.find(instr) != labels.end())
     {
-        ROM[address] = labels[instr];
+        writeValueToFile(1, address, labels[instr]); // Write to ROM
     }
     else
     {
-        ROM[address] = getOpcode(instr);
+        writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
     }
 
     address++;
@@ -84,11 +91,11 @@ void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstre
 
         if (labels.find(instr) != labels.end())
         {
-            ROM[address] = labels[instr];
+            writeValueToFile(1, address, labels[instr]); // Write to ROM
         }
         else
         {
-            ROM[address] = getOpcode(instr);
+            writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
         }
         address++;
         iss >> instr;
@@ -98,4 +105,22 @@ void SecondPassAnalyzer::processInstruction(std::string &instr, std::istringstre
 u_int16_t SecondPassAnalyzer::getOpcode(std::string &inst)
 {
     return opcodes[inst];
+}
+
+void SecondPassAnalyzer::writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value)
+{
+    switch (type)
+    {
+    case 0:
+        std::streampos pos = index * elementSize;
+        RAM->seekp(pos);
+        RAM->write(reinterpret_cast<const char *>(&value), elementSize);
+        break;
+
+    case 1:
+        std::streampos pos = index * elementSize;
+        ROM->seekp(pos);
+        ROM->write(reinterpret_cast<const char *>(&value), elementSize);
+        break;
+    }
 }
