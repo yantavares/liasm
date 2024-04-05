@@ -55,25 +55,47 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
         return;
     }
 
+    address++;
+
     if (instr == "CONST")
     {
+        if (!(iss >> var) || !std::all_of(var.begin(), var.end(), ::isdigit))
+        {
+            throw std::runtime_error("CONST instruction must have a value.");
+            return;
+        }
+
         address++;
     }
     else if (instr == "SPACE")
     {
+        if (iss >> var && var[0] != ';')
+        {
+            throw std::runtime_error("SPACE instruction must not have a value.");
+            return;
+        }
         address++;
     }
     else if (instr == "STOP")
     {
+        if (iss >> var && var[0] != ';')
+        {
+            throw std::runtime_error("STOP instruction must not have a value.");
+            return;
+        }
         stopFlag = true;
     }
-
-    address++;
-    while (!stopFlag && iss >> instr)
+    else
     {
-        if (instr[0] == ';')
+        if (!(iss >> var))
         {
-            break; // Comment detected, stop processing the line
+            throw std::runtime_error("Instruction " + instr + " must have a value.");
+            return;
+        }
+
+        if (!isLabelValid(var, false))
+        {
+            return;
         }
         address++;
     }
@@ -96,23 +118,26 @@ void FirstPassAnalyzer::printLabels()
     std::cout << std::endl;
 }
 
-bool FirstPassAnalyzer::isLabelValid(std::string &label)
+bool FirstPassAnalyzer::isLabelValid(std::string &label, bool checkExits)
 {
-    if (labels.find(label) != labels.end())
+    if (checkExits)
     {
-        std::cerr << "Label " << label << " already exists." << std::endl;
-        return false;
+        if (labels.find(label) != labels.end())
+        {
+            throw std::runtime_error("Label " + label + " already exists.");
+            return false;
+        }
     }
 
     if (!isalpha(label[0]))
     {
-        std::cerr << "Label " << label << " must start with a letter." << std::endl;
+        throw std::runtime_error("Label " + label + " must start with a letter.");
         return false;
     }
 
     if (std::find(reservedWords.begin(), reservedWords.end(), label) != reservedWords.end())
     {
-        std::cerr << "Label " << label << " is a reserved word." << std::endl;
+        throw std::runtime_error("Label " + label + " is a reserved word.");
         return false;
     }
 
@@ -123,7 +148,8 @@ bool FirstPassAnalyzer::isInstrValid(std::string &instr)
 {
     if (std::find(reservedWords.begin(), reservedWords.end(), instr) == reservedWords.end())
     {
-        std::cerr << "Instruction " << instr << " is not valid." << std::endl;
+        throw std::runtime_error("Instruction " + instr + " is not valid.");
+        return false;
     }
 
     return true;

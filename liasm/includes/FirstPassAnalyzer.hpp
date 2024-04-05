@@ -16,7 +16,7 @@ public:
 
     int analyse(std::ifstream &file);
     void printLabels();
-    bool isLabelValid(std::string &label);
+    bool isLabelValid(std::string &label, bool checkExists = true);
     bool isInstrValid(std::string &instr);
 
 private:
