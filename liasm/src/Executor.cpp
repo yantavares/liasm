@@ -25,12 +25,12 @@ int Executor::execute()
     {
         instr = readValueFromFile(1, PC);
 
-        if (instr == 0x00) // STOP
+        if (instr == 0x0E) // STOP
         {
             break;
         }
 
-        if (instr > 0x0C || instr < 0x00)
+        if (instr > 0x0E || instr < 0x01)
         {
             std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
             throw std::runtime_error("Execution failed due to invalid instruction.");
@@ -43,28 +43,33 @@ int Executor::execute()
 
 void Executor::executeInstruction(u_int16_t &instr)
 {
-    if (instr == 0x01) // INPUT
-        input(readValueFromFile(1, PC + 1));
-    else if (instr == 0x02) // LOAD
-        load(readValueFromFile(1, PC + 1));
-    else if (instr == 0x03) // ADD
-        add(readValueFromFile(1, PC + 1));
-    else if (instr == 0x04) // SUB
-        sub(readValueFromFile(1, PC + 1));
-    else if (instr == 0x05) // MULT
-        mult(readValueFromFile(1, PC + 1));
-    else if (instr == 0x06) // STORE
-        store(readValueFromFile(1, PC + 1));
-    else if (instr == 0x07) // OUTPUT
-        output(readValueFromFile(1, PC + 1));
-    else if (instr == 0x08) // JUMPZ
-        jumpZ(readValueFromFile(1, PC + 1));
-    else if (instr == 0x09) // JUMPP
-        jumpP(readValueFromFile(1, PC + 1));
-    else if (instr == 0x0A) // JUMPN
-        jumpN(readValueFromFile(1, PC + 1));
-    else if (instr == 0x0B) // JUMP
-        jump(readValueFromFile(1, PC + 1));
+    if (instr == 0x01)
+        addI(readValueFromFile(1, PC + 1)); // ADD
+    else if (instr == 0x02)
+        subI(readValueFromFile(1, PC + 1)); // SUB
+    else if (instr == 0x03)
+        multI(readValueFromFile(1, PC + 1)); // MUL
+    else if (instr == 0x04)
+        divI(readValueFromFile(1, PC + 1)); // DIV
+    else if (instr == 0x05)
+        jumpI(readValueFromFile(1, PC + 1)); // JMP
+    else if (instr == 0x06)
+        jumpNI(readValueFromFile(1, PC + 1)); // JMPN
+    else if (instr == 0x07)
+        jumpPI(readValueFromFile(1, PC + 1)); // JMPP
+    else if (instr == 0x08)
+        jumpZI(readValueFromFile(1, PC + 1)); // JMPZ
+    else if (instr == 0x09)
+        copyI(readValueFromFile(1, PC + 1), readValueFromFile(1, PC + 2)); // COPY
+    else if (instr == 0x0A)
+        loadI(readValueFromFile(1, PC + 1)); // LOAD
+    else if (instr == 0x0B)
+        storeI(readValueFromFile(1, PC + 1)); // STORE
+    else if (instr == 0x0C)
+        inputI(readValueFromFile(1, PC + 1)); // INPUT
+    else if (instr == 0x0D)
+        outputI(readValueFromFile(1, PC + 1)); // OUTPUT
+
     else
     {
         std::cerr << "Invalid instruction: " << instr << " at address " << PC << std::endl;
@@ -72,7 +77,7 @@ void Executor::executeInstruction(u_int16_t &instr)
     }
 }
 
-void Executor::input(u_int16_t variable)
+void Executor::inputI(u_int16_t variable)
 {
     u_int16_t value;
     std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
@@ -81,43 +86,49 @@ void Executor::input(u_int16_t variable)
     PC += 2;
 }
 
-void Executor::load(u_int16_t variable)
+void Executor::loadI(u_int16_t variable)
 {
     ACC = readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::add(u_int16_t variable)
+void Executor::addI(u_int16_t variable)
 {
     ACC += readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::sub(u_int16_t variable)
+void Executor::subI(u_int16_t variable)
 {
     ACC -= readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::mult(u_int16_t variable)
+void Executor::multI(u_int16_t variable)
 {
     ACC *= readValueFromFile(0, variable);
     PC += 2;
 }
 
-void Executor::store(u_int16_t variable)
+void Executor::divI(u_int16_t variable)
+{
+    ACC /= readValueFromFile(0, variable);
+    PC += 2;
+}
+
+void Executor::storeI(u_int16_t variable)
 {
     writeValueToFile(0, variable, ACC);
     PC += 2;
 }
 
-void Executor::output(u_int16_t variable)
+void Executor::outputI(u_int16_t variable)
 {
     std::cout << findKeyByValue(variable) << " = " << readValueFromFile(0, variable) << std::endl;
     PC += 2;
 }
 
-void Executor::jumpZ(u_int16_t addr)
+void Executor::jumpZI(u_int16_t addr)
 {
     if (ACC == 0)
     {
@@ -127,7 +138,7 @@ void Executor::jumpZ(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jumpP(u_int16_t addr)
+void Executor::jumpPI(u_int16_t addr)
 {
     if (ACC > 0)
     {
@@ -137,7 +148,7 @@ void Executor::jumpP(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jumpN(u_int16_t addr)
+void Executor::jumpNI(u_int16_t addr)
 {
     if (ACC < 0)
     {
@@ -147,9 +158,15 @@ void Executor::jumpN(u_int16_t addr)
         PC += 2;
 }
 
-void Executor::jump(u_int16_t addr)
+void Executor::jumpI(u_int16_t addr)
 {
     PC = addr;
+}
+
+void Executor::copyI(u_int16_t source, u_int16_t dest)
+{
+    writeValueToFile(0, dest, readValueFromFile(0, source)); // 0 -> RAM
+    PC += 3;
 }
 
 std::string Executor::findKeyByValue(u_int16_t &addr)

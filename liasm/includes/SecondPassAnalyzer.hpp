@@ -32,19 +32,20 @@ private:
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
     std::unordered_map<std::string, u_int16_t> opcodes{
-        {"STOP", 0x00},
-        {"INPUT", 0x01},
-        {"LOAD", 0x02},
-        {"ADD", 0x03},
-        {"SUB", 0x04},
-        {"MULT", 0x05},
-        {"STORE", 0x06},
-        {"OUTPUT", 0x07},
-        {"JUMPZ", 0x08},
-        {"JUMPP", 0x09},
-        {"JUMPN", 0x0A},
-        {"JUMP", 0x0B},
-    };
+        {"ADD", 0x01},
+        {"SUB", 0x02},
+        {"MUL", 0x03},
+        {"DIV", 0x04},
+        {"JMP", 0x05},
+        {"JMPN", 0x06},
+        {"JMPP", 0x07},
+        {"JMPZ", 0x08},
+        {"COPY", 0x09},
+        {"LOAD", 0x0A},
+        {"STORE", 0x0B},
+        {"INPUT", 0x0C},
+        {"OUTPUT", 0x0D},
+        {"STOP", 0x0E}};
 
     u_int16_t elementSize;
 

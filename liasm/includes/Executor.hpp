@@ -28,17 +28,19 @@ private:
     void executeInstruction(u_int16_t &instr);
     std::string findKeyByValue(u_int16_t &addr);
 
-    void input(u_int16_t variable);
-    void load(u_int16_t variable);
-    void add(u_int16_t variable);
-    void sub(u_int16_t variable);
-    void mult(u_int16_t variable);
-    void store(u_int16_t variable);
-    void output(u_int16_t variable);
-    void jumpZ(u_int16_t label);
-    void jumpP(u_int16_t label);
-    void jumpN(u_int16_t label);
-    void jump(u_int16_t label);
+    void inputI(u_int16_t variable);
+    void loadI(u_int16_t variable);
+    void addI(u_int16_t variable);
+    void subI(u_int16_t variable);
+    void divI(u_int16_t variable);
+    void multI(u_int16_t variable);
+    void storeI(u_int16_t variable);
+    void outputI(u_int16_t variable);
+    void jumpZI(u_int16_t label);
+    void jumpPI(u_int16_t label);
+    void jumpNI(u_int16_t label);
+    void jumpI(u_int16_t label);
+    void copyI(u_int16_t source, u_int16_t dest);
 
     const std::streamsize elementSize;
     u_int16_t readValueFromFile(u_int16_t type, u_int16_t index);

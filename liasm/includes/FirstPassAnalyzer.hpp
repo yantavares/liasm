@@ -28,9 +28,8 @@ private:
                         std::string &label, u_int16_t &address);
 
     std::vector<std::string> reservedWords{
-        "CONST", "SPACE", "STOP", "INPUT", "LOAD",
-        "ADD", "SUB", "MULT", "STORE", "OUTPUT", "JUMPZ",
-        "JUMPP", "JUMPN", "JUMP"};
+        "ADD", "SUB", "MUL", "DIV", "JMP", "JMPN", "JMPP", "JMPZ",
+        "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP", "CONST", "SPACE"};
 };
 
 #endif // FIRSTPASSANALYZER_HPP
