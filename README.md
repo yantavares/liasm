@@ -92,6 +92,8 @@ Before you begin, ensure the following tools are installed on your system:
 - **`make`**: Utility for automation of compilation.
 - **`g++`**: The C++ compiler from the GNU Compiler Collection (GCC).
 
+The assembler was tested succesafuly on OSX and Linux (both x86 and ARM).
+
 ### Assembling and Running Programs with `licc`
 
 To compile the `licc` assembler:
