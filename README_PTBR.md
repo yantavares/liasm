@@ -1,6 +1,6 @@
 # Linguagem Inventada - liasm (PT-BR)
 
-[![Estrelas](https://img.shields.io/github/stars/yantavares/liasm?style=flat&logo=github)]
+![Estrelas](https://img.shields.io/github/stars/yantavares/paineis-do-carmo)
 [![Licença: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 Para a versão em inglês, clique [aqui](README.md).
