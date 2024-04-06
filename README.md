@@ -1,6 +1,6 @@
 # Linguagem Inventada - liasm (EN)
 
-[![Stars](https://img.shields.io/github/stars/yantavares/liasm)]
+![Stars](https://img.shields.io/github/stars/yantavares/liasm)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 For the Portuguese version, click [here](README_PTBR.md).
