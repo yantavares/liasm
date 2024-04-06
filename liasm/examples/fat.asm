@@ -1,12 +1,12 @@
        INPUT   N
        LOAD    N
 FAT:   SUB     ONE
-       JMPZ   FIM
+       JMPZ    FIM
        STORE   AUX
-       MUL    N
+       MUL     N
        STORE   N
        LOAD    AUX
-       JMP    FAT
+       JMP     FAT
 FIM:   OUTPUT  N
        STOP
 AUX:   SPACE
