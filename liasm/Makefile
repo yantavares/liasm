@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -std=c++14 -I includes
+CFLAGS = -Wall -std=c++20 -I includes
 SRCDIR = src
 BINDIR = bin
 TESTDIR = tests

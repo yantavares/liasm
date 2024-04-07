@@ -4,6 +4,12 @@
 #include <dirent.h>
 #include <vector>
 #include <sys/wait.h>
+#include <format>
+
+// Define ANSI escape codes for colors
+const char *RED = "\033[31m";
+const char *GREEN = "\033[32m";
+const char *RESET = "\033[0m";
 
 std::vector<std::string> getTestFiles(const std::string &directory)
 {
@@ -51,16 +57,16 @@ int main()
             int exitStatus = WEXITSTATUS(status);
             if (exitStatus == 0)
             {
-                std::cout << "Success: " << file << " ran without errors." << std::endl;
+                std::cout << std::format("{}Success: {} ran without errors.{}\n", GREEN, file, RESET);
             }
             else
             {
-                std::cerr << "Error: " << file << " exited with status " << exitStatus << std::endl;
+                std::cerr << std::format("{}Error: {} exited with status {}.{}\n", RED, file, exitStatus, RESET);
             }
         }
         else
         {
-            std::cerr << "Error running command for file: " << file << std::endl;
+            std::cerr << std::format("{}Error running command for file: {}.{}\n", RED, file, RESET);
         }
     }
     return 0;
