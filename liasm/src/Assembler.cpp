@@ -39,6 +39,7 @@ int Assembler::execute()
 
 u_int16_t Assembler::executeInstruction(u_int16_t &instr)
 {
+
     if (instr == 0x01)
     {
         addI(readValueFromFile(1, PC + 1)); // ADD
@@ -137,7 +138,7 @@ void Assembler::inputI(u_int16_t variable)
 
 void Assembler::loadI(u_int16_t variable)
 {
-    ACC = readSignedValueFromFile(0, variable);
+    ACC = readSignedValueFromFile(0, variable); // 0 -> RAM
     PC += 2;
 }
 
@@ -167,7 +168,7 @@ void Assembler::divI(u_int16_t variable)
 
 void Assembler::storeI(u_int16_t variable)
 {
-    writeValueToFile(0, variable, ACC);
+    writeValueToFile(0, variable, ACC); // 0 -> RAM
     PC += 2;
 }
 
@@ -189,7 +190,7 @@ void Assembler::jumpZI(u_int16_t addr)
 
 void Assembler::jumpPI(u_int16_t addr)
 {
-    if (ACC > 0)
+    if (ACC > 0x00)
     {
         PC = addr;
     }
@@ -239,7 +240,7 @@ std::string Assembler::findKeyByValue(u_int16_t &addr)
             return pair.first;
         }
     }
-    return ""; // Return an empty string if no key is found
+    return "ACC"; // Return ACC if no label is found
 }
 
 u_int16_t Assembler::readValueFromFile(u_int16_t type, u_int16_t index)

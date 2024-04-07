@@ -19,8 +19,8 @@ public:
     int execute();
 
 private:
-    u_int16_t ACC = 0; // Accumulator
-    u_int16_t PC = 0;  // Program Counter
+    int16_t ACC = 0;  // Accumulator
+    u_int16_t PC = 0; // Program Counter
 
     std::unordered_map<std::string, u_int16_t> labels;
 

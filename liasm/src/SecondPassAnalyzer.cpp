@@ -73,6 +73,34 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         writeValueToFile(1, address++, 0x10);  // Write NOP to ROM
         return;
     }
+    else if (instr == "COPY")
+    {
+        std::string src, dest;
+        iss >> src >> dest;
+
+        writeValueToFile(1, address++, getOpcode(instr)); // Write to ROM
+
+        if (labels.find(src) != labels.end())
+        {
+            writeValueToFile(1, address++, labels[src]); // Write to ROM
+        }
+        else
+        {
+            std::cerr << "Invalid source label " << src << '\n';
+            throw std::runtime_error("Invalid source label.");
+        }
+        if (labels.find(dest) != labels.end())
+        {
+            writeValueToFile(1, address++, labels[dest]); // Write to ROM
+        }
+        else
+        {
+            std::cerr << "Invalid destination label " << dest << '\n';
+            throw std::runtime_error("Invalid destination label.");
+        }
+
+        return;
+    }
 
     if (labels.find(instr) != labels.end())
     {
@@ -106,6 +134,11 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
 u_int16_t SecondPassAnalyzer::getOpcode(std::string &inst)
 {
+    if (opcodes.find(inst) == opcodes.end())
+    {
+        std::cerr << "Invalid instruction " << inst << '\n';
+        throw std::runtime_error("Invalid instruction.");
+    }
     return opcodes[inst];
 }
 

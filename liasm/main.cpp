@@ -26,17 +26,43 @@ int main(int argc, char *argv[])
 
     std::unordered_map<std::string, u_int16_t> labels; // Labels
 
-    FirstPassAnalyzer analyzer(labels);
-    analyzer.analyse(file);
-    analyzer.printLabels();
+    try
+    {
+        FirstPassAnalyzer analyzer(labels);
+        analyzer.analyse(file);
+        analyzer.printLabels();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << " FIRST PASS ERROR!" << '\n';
+        return 1;
+    }
 
     file.open(argv[1]);
 
-    SecondPassAnalyzer analyzer2(labels);
-    analyzer2.analyse(file);
+    try
+    {
+        SecondPassAnalyzer analyzer2(labels);
+        analyzer2.analyse(file);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << " SECOND PASS ERROR!" << '\n';
+        return 1;
+    }
 
-    Assembler executor(labels);
-    executor.execute();
+    file.close();
+
+    try
+    {
+        Assembler executor(labels);
+        executor.execute();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << " RUNTIME ERROR!" << '\n';
+        return 1;
+    }
 
     return 0;
 }
