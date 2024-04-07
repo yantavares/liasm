@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
         std::cerr << e.what() << " FIRST PASS ERROR!" << '\n';
         return 1;
     }
+    // Makes sure to reset the file to the beginning
+    file.clear();
+    file.seekg(0, std::ios::beg);
 
     file.open(argv[1]);
 

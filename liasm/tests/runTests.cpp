@@ -32,7 +32,7 @@ std::vector<std::string> getTestFiles(const std::string &directory)
 int main()
 {
     const std::string directory = "./tests";
-    const std::string commandPrefix = "./licc ";
+    const std::string commandPrefix = "make run FILE=";
 
     auto testFiles = getTestFiles(directory);
     for (const auto &file : testFiles)
