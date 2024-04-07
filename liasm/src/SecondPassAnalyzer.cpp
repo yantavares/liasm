@@ -102,14 +102,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         return;
     }
 
-    if (labels.find(instr) != labels.end())
-    {
-        writeValueToFile(1, address, labels[instr]); // Write to ROM
-    }
-    else
-    {
-        writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
-    }
+    writeTokenToROM(instr, address, label); // Write to ROM
 
     address++;
 
@@ -119,15 +112,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         {
             break; // Comment detected, stop processing the line
         }
-
-        if (labels.find(instr) != labels.end())
-        {
-            writeValueToFile(1, address, labels[instr]); // Write to ROM
-        }
-        else
-        {
-            writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
-        }
+        writeTokenToROM(instr, address, label); // Write to ROM
         address++;
     }
 }
@@ -214,4 +199,16 @@ int16_t SecondPassAnalyzer::parseValue(std::string &value)
     }
 
     return parsedValue;
+}
+
+void SecondPassAnalyzer::writeTokenToROM(std::string &instr, u_int16_t &address, std::string &label)
+{
+    if (labels.find(instr) != labels.end())
+    {
+        writeValueToFile(1, address, labels[instr]); // Write to ROM
+    }
+    else
+    {
+        writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
+    }
 }

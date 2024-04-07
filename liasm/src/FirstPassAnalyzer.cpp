@@ -76,23 +76,19 @@ void FirstPassAnalyzer::scanIntruction(std::string &instr, std::istringstream &i
     else if (instr == "COPY")
     {
         std::string src, dest;
-        if (src == "ACC" || dest == "ACC")
-        {
-            throw std::runtime_error("COPY instruction must not have ACC as source or destination.");
-            return;
-        }
+
         if (!(iss >> src) || !(iss >> dest))
         {
             throw std::runtime_error("COPY instruction must have two values.");
             return;
         }
 
-        if (!isLabelValid(var, false) || !isLabelValid(dest, false))
+        if (!isLabelValid(src, true) || !isLabelValid(dest, true))
         {
             throw std::runtime_error("Invalid label in COPY instruction.");
             return;
         }
-        address++;
+        address += 2;
     }
     else if (instr == "STOP" || instr == "THROW" || instr == "NOP")
     {
@@ -152,11 +148,13 @@ bool FirstPassAnalyzer::isLabelValid(std::string &label, bool checkExits)
 
     if (!isalpha(label[0]))
     {
+        std::cerr << "Label " << label << " must start with a letter!" << '\n';
         return false;
     }
 
     if (std::find(reservedWords.begin(), reservedWords.end(), label) != reservedWords.end())
     {
+        std::cerr << "Label " << label << " is a reserved word!" << '\n';
         return false;
     }
 
