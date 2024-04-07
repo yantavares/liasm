@@ -122,12 +122,24 @@ After compiling the assembler:
   ./licc <file path>
   ```
 
+- **Optional**: You can also set the mode to `debug` to see the generated labels and verbose output.
+
+  ```bash
+  ./licc <file path> debug
+  ```
+
 #### Direct Execution with `make run`
 
 - **To compile the assembler and execute directly**, replace `<file path>` with the path of your `.asm` file:
 
   ```bash
   make run FILE=<file path>
+  ```
+
+- **Optional**: You can also set the mode to `debug` to see the generated labels and verbose output.
+
+  ```bash
+  make run FILE=<file path> MODE=debug
   ```
 
 ### Running Tests

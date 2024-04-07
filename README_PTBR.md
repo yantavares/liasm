@@ -46,6 +46,7 @@ Embora simples, `liasm` pode ser considerada uma linguagem Turing completa. Ela 
 | OUTPUT    | 13              | 2                  | saída <- mem(OP)        |
 | STOP      | 14              | 1                  | Suspende a execução     |
 | THROW     | 15              | 1                  | Lança uma exceção       |
+| NOP       | 16              | 1                  | Incrementa PC em 1      |
 
 Diretivas:
 
@@ -123,12 +124,24 @@ Após compilar o montador:
   ./licc <caminho do arquivo>
   ```
 
-#### Execução Direta com `make run`
-
-- **Para compilar o montador e executar diretamente**, substitua `"Caminho do arquivo"` pelo caminho do seu arquivo `.asm`:
+- **Opcional**: Você também pode definir o modo para `debug` para ver os rótulos gerados e a saída verbosa.
 
   ```bash
-  make run FILE="Caminho do arquivo"
+  ./licc <caminho do arquivo> debug
+  ```
+
+#### Execução Direta com `make run`
+
+- **Para compilar o montador e executar diretamente**, substitua `<Caminho do arquivo>` pelo caminho do seu arquivo `.asm`:
+
+  ```bash
+  make run FILE=<Caminho do arquivo>
+  ```
+
+- **Opcional**: Você também pode definir o modo para `debug` para ver os rótulos gerados e a saída verbosa.
+
+  ```bash
+  make run FILE=<Caminho do arquivo> MODE=debug
   ```
 
 ### Executando Testes
