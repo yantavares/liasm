@@ -53,6 +53,7 @@ private:
     };
 
     u_int16_t elementSize;
+    std::unordered_map<std::string, u_int16_t> usedLabels;
 
 protected:
     std::unique_ptr<std::fstream> RAM;

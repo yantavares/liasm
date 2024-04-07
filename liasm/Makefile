@@ -25,7 +25,7 @@ $(BINDIR):
 	mkdir -p $(BINDIR)
 
 run: all
-	./$(TARGET) $(FILE)
+	./$(TARGET) $(FILE) $(MODE)
 
 clean:
 	rm -rf $(BINDIR)

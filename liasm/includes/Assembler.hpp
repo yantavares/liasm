@@ -13,7 +13,7 @@
 class Assembler
 {
 public:
-    Assembler(std::unordered_map<std::string, u_int16_t> labels);
+    Assembler(std::unordered_map<std::string, u_int16_t> labels, std::string mode);
 
     // Executes the program
     int execute();
@@ -21,6 +21,8 @@ public:
 private:
     int16_t ACC = 0;  // Accumulator
     u_int16_t PC = 0; // Program Counter
+
+    std::string mode;
 
     std::unordered_map<std::string, u_int16_t> labels;
 

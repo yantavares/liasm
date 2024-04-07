@@ -1,7 +1,7 @@
 #include "Assembler.hpp"
 
-Assembler::Assembler(std::unordered_map<std::string, u_int16_t> labels)
-    : labels(labels), elementSize(16) // 16 bits per element
+Assembler::Assembler(std::unordered_map<std::string, u_int16_t> labels, std::string mode = "normal")
+    : mode(mode), labels(labels), elementSize(16) // 16 bits per element
 {
 
     RAM = std::make_unique<std::fstream>("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
@@ -130,7 +130,8 @@ u_int16_t Assembler::executeInstruction(u_int16_t &instr)
 void Assembler::inputI(u_int16_t variable)
 {
     u_int16_t value;
-    std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
+    if (mode == "debug")
+        std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
     std::cin >> value;
     writeValueToFile(0, variable, value); // 0 -> RAM
     PC += 2;
@@ -174,7 +175,10 @@ void Assembler::storeI(u_int16_t variable)
 
 void Assembler::outputI(u_int16_t variable)
 {
-    std::cout << findKeyByValue(variable) << " = " << readSignedValueFromFile(0, variable) << std::endl;
+    if (mode == "debug")
+        std::cout << findKeyByValue(variable) << " = " << readSignedValueFromFile(0, variable) << std::endl;
+    else
+        std::cout << readSignedValueFromFile(0, variable) << std::endl;
     PC += 2;
 }
 

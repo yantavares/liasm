@@ -34,6 +34,15 @@ int SecondPassAnalyzer::analyse(std::ifstream &file)
         parseInstruction(instr, iss, label, address);
     }
 
+    for (auto const &[key, val] : labels)
+    {
+        if (usedLabels[key] == 0)
+        {
+            std::cerr << "[Warning] "
+                      << "Label " << key << " is defined but not used.\n";
+        }
+    }
+
     file.close();
 
     return 0;
@@ -83,6 +92,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
         if (labels.find(src) != labels.end())
         {
+            usedLabels[src]++;
             writeValueToFile(1, address++, labels[src]); // Write to ROM
         }
         else
@@ -92,6 +102,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         }
         if (labels.find(dest) != labels.end())
         {
+            usedLabels[dest]++;
             writeValueToFile(1, address++, labels[dest]); // Write to ROM
         }
         else
@@ -206,6 +217,7 @@ void SecondPassAnalyzer::writeTokenToROM(std::string &instr, u_int16_t &address,
 {
     if (labels.find(instr) != labels.end())
     {
+        usedLabels[instr]++;
         writeValueToFile(1, address, labels[instr]); // Write to ROM
     }
     else

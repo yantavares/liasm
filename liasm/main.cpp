@@ -11,9 +11,13 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    std::string MODE = "normal"; // Default mode.
+                                 // Can be set to 'debug' or 'release' using command line arguments
+
+    if (argc < 2)
     {
         std::cerr << "Usage: " << argv[0] << " <program_file>" << std::endl;
+        std::cerr << "You can also set the mode by passing the mode as the second argument." << std::endl;
         return 1;
     }
 
@@ -24,13 +28,29 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (argc == 3)
+    {
+        MODE = argv[2];
+        if (MODE != "release" && MODE != "debug")
+        {
+            std::cerr << "Invalid mode. Please use 'release' or 'debug'." << std::endl;
+            return 1;
+        }
+        else
+        {
+            std::cout << "Running in " << MODE << " mode . . .\n"
+                      << std::endl;
+        }
+    }
+
     std::unordered_map<std::string, u_int16_t> labels; // Labels
 
     try
     {
         FirstPassAnalyzer analyzer(labels);
         analyzer.analyse(file);
-        analyzer.printLabels();
+        if (MODE == "debug")
+            analyzer.printLabels();
     }
     catch (const std::exception &e)
     {
@@ -58,7 +78,7 @@ int main(int argc, char *argv[])
 
     try
     {
-        Assembler executor(labels);
+        Assembler executor(labels, MODE);
         executor.execute();
     }
     catch (const std::exception &e)
