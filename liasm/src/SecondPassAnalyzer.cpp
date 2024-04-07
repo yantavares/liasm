@@ -63,6 +63,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         iss >> value;
 
         int16_t parsedValue = parseValue(value);
+
         writeSignedConstantToMemory(labels[label], parsedValue); // Write to RAM
         writeValueToFile(1, address++, 0x10);                    // Write NOP to ROM
         return;
@@ -121,8 +122,8 @@ u_int16_t SecondPassAnalyzer::getOpcode(std::string &inst)
 {
     if (opcodes.find(inst) == opcodes.end())
     {
-        std::cerr << "Invalid instruction " << inst << '\n';
-        throw std::runtime_error("Invalid instruction.");
+        std::cerr << "Invalid token " << inst << '\n';
+        throw std::runtime_error("Invalid token.");
     }
     return opcodes[inst];
 }

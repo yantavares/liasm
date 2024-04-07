@@ -27,7 +27,8 @@ private:
 
     std::vector<std::string> reservedWords{
         "ADD", "SUB", "MUL", "DIV", "JMP", "JMPN", "JMPP", "JMPZ",
-        "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP", "CONST", "SPACE", "THROW", "NOP"};
+        "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP", "CONST",
+        "SPACE", "THROW", "NOP", "ACC", "PC"};
 };
 
 #endif // FIRSTPASSANALYZER_HPP

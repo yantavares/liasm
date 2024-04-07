@@ -155,6 +155,7 @@ bool FirstPassAnalyzer::isLabelValid(std::string &label, bool checkExits)
     if (std::find(reservedWords.begin(), reservedWords.end(), label) != reservedWords.end())
     {
         std::cerr << "Label " << label << " is a reserved word!" << '\n';
+        throw std::runtime_error("Label is a reserved word.");
         return false;
     }
 

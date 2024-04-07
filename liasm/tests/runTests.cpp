@@ -57,10 +57,20 @@ int main()
             int exitStatus = WEXITSTATUS(status);
             if (exitStatus == 0)
             {
+                if (file.find("error") != std::string::npos)
+                {
+                    std::cerr << std::format("{}Error: {} ran without errors.{}\n", RED, file, RESET);
+                    continue;
+                }
                 std::cout << std::format("{}Success: {} ran without errors.{}\n", GREEN, file, RESET);
             }
             else
             {
+                if (file.find("error") != std::string::npos)
+                {
+                    std::cout << std::format("{}Success: {} exited with status {}.{}\n", GREEN, file, exitStatus, RESET);
+                    continue;
+                }
                 std::cerr << std::format("{}Error: {} exited with status {}.{}\n", RED, file, exitStatus, RESET);
             }
         }
