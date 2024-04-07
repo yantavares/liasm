@@ -3,7 +3,7 @@
 ![Stars](https://img.shields.io/github/stars/yantavares/liasm)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-For the Portuguese version, click [here](README_PTBR.md).
+<img src="utils/brazil.png" height="20px" width="auto" alt="Brazil Flag"  /> For the Portuguese version, click [here](README_PTBR.md).
 
 Welcome to the repository of the Linguagem Inventada, a simulation machine that allows assembling and running programs written in the "Linguagem Inventada" or `liasm`, created in the University of Brasília (UnB).
 

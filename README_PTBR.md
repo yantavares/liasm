@@ -3,7 +3,7 @@
 ![Estrelas](https://img.shields.io/github/stars/yantavares/liasm)
 [![Licença: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-Para a versão em inglês, clique [aqui](README.md).
+<img src="utils/us.png" height="20px" width="auto" alt="Bandeira EUA"  /> Para a versão em inglês, clique [aqui](README.md).
 
 Bem-vindo ao repositório da Linguagem Inventada, uma simulação de máquina que permite montar e executar programas escritos na "Linguagem Inventada" ou `liasm`, criada pela Universidade de Brasília (UnB).
 
