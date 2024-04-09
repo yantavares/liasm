@@ -83,11 +83,9 @@ Aqui está uma visão geral da estrutura do projeto para ajudá-lo a navegar e e
   - **`utils/`**: Ferramentas auxiliares.
   - **`compiler.cpp`**: O arquivo principal do compilador.
   - **`Makefile`**: Para compilar o projeto usando `make`.
-  - **`MEMdata.txt`** e **`MEMtext.txt`**: Simulam arquivos de memória MEMdata e MEMtext, respectivamente.
+  - **`MEMdata.txt`** e **`MEMtext.txt`**: Simulam arquivos de memória de dados e de instruções, respectivamente.
 - **`.gitignore`**: Lista de arquivos/diretórios a ignorar na versionamento.
 - **`README.md`**: Documentação (este arquivo).
-
-Obs.: MEMdata e MEMtext são arquivos de memória usados para simular a memória da máquina hipotética, sendo MEMdata para dados e MEMtext para instruções.
 
 ## Primeiros Passos
 
