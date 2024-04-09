@@ -3,16 +3,16 @@
 SecondPassAnalyzer::SecondPassAnalyzer(std::unordered_map<std::string, uint16_t> &labels)
     : labels(labels), elementSize(16) // 16 bits per element
 {
-    RAM = std::make_unique<std::fstream>("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
-    ROM = std::make_unique<std::fstream>("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    MEMdata = std::make_unique<std::fstream>("./MEMdata.txt", std::ios::in | std::ios::out | std::ios::binary);
+    MEMtext = std::make_unique<std::fstream>("./MEMtext.txt", std::ios::in | std::ios::out | std::ios::binary);
 
-    if (!RAM->is_open())
+    if (!MEMdata->is_open())
     {
-        throw std::runtime_error("Failed to open RAM.txt");
+        throw std::runtime_error("Failed to open MEMdata.txt");
     }
-    if (!ROM->is_open())
+    if (!MEMtext->is_open())
     {
-        throw std::runtime_error("Failed to open ROM.txt");
+        throw std::runtime_error("Failed to open MEMtext.txt");
     }
 }
 
@@ -73,14 +73,14 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
 
         int16_t parsedValue = parseValue(value);
 
-        writeSignedConstantToMemory(labels[label], parsedValue); // Write to RAM
-        writeValueToFile(1, address++, 0x10);                    // Write NOP to ROM
+        writeSignedConstantToMemory(labels[label], parsedValue); // Write to MEMdata
+        writeValueToFile(1, address++, 0x10);                    // Write NOP to MEMtext
         return;
     }
     else if (instr == "SPACE")
     {
-        writeValueToFile(0, labels[label], 0); // Write to RAM
-        writeValueToFile(1, address++, 0x10);  // Write NOP to ROM
+        writeValueToFile(0, labels[label], 0); // Write to MEMdata
+        writeValueToFile(1, address++, 0x10);  // Write NOP to MEMtext
         return;
     }
     else if (instr == "COPY")
@@ -88,12 +88,12 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         std::string src, dest;
         iss >> src >> dest;
 
-        writeValueToFile(1, address++, getOpcode(instr)); // Write to ROM
+        writeValueToFile(1, address++, getOpcode(instr)); // Write to MEMtext
 
         if (labels.find(src) != labels.end())
         {
             usedLabels[src]++;
-            writeValueToFile(1, address++, labels[src]); // Write to ROM
+            writeValueToFile(1, address++, labels[src]); // Write to MEMtext
         }
         else
         {
@@ -103,7 +103,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         if (labels.find(dest) != labels.end())
         {
             usedLabels[dest]++;
-            writeValueToFile(1, address++, labels[dest]); // Write to ROM
+            writeValueToFile(1, address++, labels[dest]); // Write to MEMtext
         }
         else
         {
@@ -114,7 +114,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         return;
     }
 
-    writeTokenToROM(instr, address, label); // Write to ROM
+    writeTokenToMEMtext(instr, address, label); // Write to MEMtext
 
     address++;
 
@@ -124,7 +124,7 @@ void SecondPassAnalyzer::parseInstruction(std::string &instr, std::istringstream
         {
             break; // Comment detected, stop processing the line
         }
-        writeTokenToROM(instr, address, label); // Write to ROM
+        writeTokenToMEMtext(instr, address, label); // Write to MEMtext
         address++;
     }
 }
@@ -151,13 +151,13 @@ void SecondPassAnalyzer::writeValueToFile(u_int16_t type, u_int16_t index, u_int
     switch (type)
     {
     case 0:
-        RAM->seekp(pos);
-        *RAM << binaryString << std::endl; // Write the binary string with a newline
+        MEMdata->seekp(pos);
+        *MEMdata << binaryString << std::endl; // Write the binary string with a newline
         break;
 
     case 1:
-        ROM->seekp(pos);
-        *ROM << binaryString << std::endl; // Write the binary string with a newline
+        MEMtext->seekp(pos);
+        *MEMtext << binaryString << std::endl; // Write the binary string with a newline
         break;
     }
 }
@@ -171,8 +171,8 @@ void SecondPassAnalyzer::writeSignedConstantToMemory(u_int16_t index, int16_t va
     // Note: This calculation assumes each line in the file is 16 characters long plus a newline character.
     std::streampos pos = index * (elementSize + 1); // +1 for the newline character
 
-    RAM->seekp(pos);
-    *RAM << binaryString << std::endl; // Write the binary string with a newline
+    MEMdata->seekp(pos);
+    *MEMdata << binaryString << std::endl; // Write the binary string with a newline
 }
 
 int16_t SecondPassAnalyzer::parseValue(std::string &value)
@@ -213,15 +213,15 @@ int16_t SecondPassAnalyzer::parseValue(std::string &value)
     return parsedValue;
 }
 
-void SecondPassAnalyzer::writeTokenToROM(std::string &instr, u_int16_t &address, std::string &label)
+void SecondPassAnalyzer::writeTokenToMEMtext(std::string &instr, u_int16_t &address, std::string &label)
 {
     if (labels.find(instr) != labels.end())
     {
         usedLabels[instr]++;
-        writeValueToFile(1, address, labels[instr]); // Write to ROM
+        writeValueToFile(1, address, labels[instr]); // Write to MEMtext
     }
     else
     {
-        writeValueToFile(1, address, getOpcode(instr)); // Write to ROM
+        writeValueToFile(1, address, getOpcode(instr)); // Write to MEMtext
     }
 }

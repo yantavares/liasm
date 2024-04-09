@@ -4,16 +4,16 @@ Assembler::Assembler(std::unordered_map<std::string, u_int16_t> labels, std::str
     : mode(mode), labels(labels), elementSize(16) // 16 bits per element
 {
 
-    RAM = std::make_unique<std::fstream>("./RAM.txt", std::ios::in | std::ios::out | std::ios::binary);
-    ROM = std::make_unique<std::fstream>("./ROM.txt", std::ios::in | std::ios::out | std::ios::binary);
+    MEMdata = std::make_unique<std::fstream>("./MEMdata.txt", std::ios::in | std::ios::out | std::ios::binary);
+    MEMtext = std::make_unique<std::fstream>("./MEMtext.txt", std::ios::in | std::ios::out | std::ios::binary);
 
-    if (!RAM->is_open())
+    if (!MEMdata->is_open())
     {
-        throw std::runtime_error("Failed to open RAM.txt");
+        throw std::runtime_error("Failed to open MEMdata.txt");
     }
-    if (!ROM->is_open())
+    if (!MEMtext->is_open())
     {
-        throw std::runtime_error("Failed to open ROM.txt");
+        throw std::runtime_error("Failed to open MEMtext.txt");
     }
 }
 
@@ -23,7 +23,7 @@ int Assembler::execute()
 
     while (true)
     {
-        instr = readValueFromFile(1, PC); // 1 -> ROM
+        instr = readValueFromFile(1, PC); // 1 -> MEMtext
 
         if (instr > 0x10 || instr < 0x01)
         {
@@ -133,13 +133,13 @@ void Assembler::inputI(u_int16_t variable)
     if (mode == "debug")
         std::cout << "Enter a value for " << findKeyByValue(variable) << ": ";
     std::cin >> value;
-    writeValueToFile(0, variable, value); // 0 -> RAM
+    writeValueToFile(0, variable, value); // 0 -> MEMdata
     PC += 2;
 }
 
 void Assembler::loadI(u_int16_t variable)
 {
-    ACC = readSignedValueFromFile(0, variable); // 0 -> RAM
+    ACC = readSignedValueFromFile(0, variable); // 0 -> MEMdata
     PC += 2;
 }
 
@@ -169,7 +169,7 @@ void Assembler::divI(u_int16_t variable)
 
 void Assembler::storeI(u_int16_t variable)
 {
-    writeValueToFile(0, variable, ACC); // 0 -> RAM
+    writeValueToFile(0, variable, ACC); // 0 -> MEMdata
     PC += 2;
 }
 
@@ -219,7 +219,7 @@ void Assembler::jumpI(u_int16_t addr)
 
 void Assembler::copyI(u_int16_t source, u_int16_t dest)
 {
-    writeValueToFile(0, dest, readSignedValueFromFile(0, source)); // 0 -> RAM
+    writeValueToFile(0, dest, readSignedValueFromFile(0, source)); // 0 -> MEMdata
     PC += 3;
 }
 
@@ -258,13 +258,13 @@ u_int16_t Assembler::readValueFromFile(u_int16_t type, u_int16_t index)
     switch (type)
     {
     case 0:
-        RAM->seekg(pos);
-        std::getline(*RAM, binaryString); // Read the line into the string
+        MEMdata->seekg(pos);
+        std::getline(*MEMdata, binaryString); // Read the line into the string
         break;
 
     case 1:
-        ROM->seekg(pos);
-        std::getline(*ROM, binaryString); // Read the line into the string
+        MEMtext->seekg(pos);
+        std::getline(*MEMtext, binaryString); // Read the line into the string
         break;
     }
 
@@ -288,13 +288,13 @@ int16_t Assembler::readSignedValueFromFile(u_int16_t type, u_int16_t index)
     switch (type)
     {
     case 0:
-        RAM->seekg(pos);
-        std::getline(*RAM, binaryString); // Read the line into the string
+        MEMdata->seekg(pos);
+        std::getline(*MEMdata, binaryString); // Read the line into the string
         break;
 
     case 1:
-        ROM->seekg(pos);
-        std::getline(*ROM, binaryString); // Read the line into the string
+        MEMtext->seekg(pos);
+        std::getline(*MEMtext, binaryString); // Read the line into the string
         break;
     }
 
@@ -319,13 +319,13 @@ void Assembler::writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t valu
     switch (type)
     {
     case 0:
-        RAM->seekp(pos);
-        *RAM << binaryString << std::endl; // Write the binary string with a newline
+        MEMdata->seekp(pos);
+        *MEMdata << binaryString << std::endl; // Write the binary string with a newline
         break;
 
     case 1:
-        ROM->seekp(pos);
-        *ROM << binaryString << std::endl; // Write the binary string with a newline
+        MEMtext->seekp(pos);
+        *MEMtext << binaryString << std::endl; // Write the binary string with a newline
         break;
     }
 }

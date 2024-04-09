@@ -52,8 +52,8 @@ private:
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
 
 protected:
-    std::unique_ptr<std::fstream> RAM;
-    std::unique_ptr<std::fstream> ROM;
+    std::unique_ptr<std::fstream> MEMdata;
+    std::unique_ptr<std::fstream> MEMtext;
 };
 
 #endif // SECONDPASSEXECUTOR_HPP

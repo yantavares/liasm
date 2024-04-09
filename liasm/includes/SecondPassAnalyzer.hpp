@@ -31,7 +31,7 @@ private:
 
     void writeSignedConstantToMemory(u_int16_t index, int16_t value);
     void writeValueToFile(u_int16_t type, u_int16_t index, u_int16_t value);
-    void writeTokenToROM(std::string &instr, u_int16_t &address, std::string &label);
+    void writeTokenToMEMtext(std::string &instr, u_int16_t &address, std::string &label);
 
     std::unordered_map<std::string, u_int16_t> opcodes{
         {"ADD", 0x01},
@@ -56,8 +56,8 @@ private:
     std::unordered_map<std::string, u_int16_t> usedLabels;
 
 protected:
-    std::unique_ptr<std::fstream> RAM;
-    std::unique_ptr<std::fstream> ROM;
+    std::unique_ptr<std::fstream> MEMdata;
+    std::unique_ptr<std::fstream> MEMtext;
 };
 
 #endif // SECONDPASSANALYZER_HPP

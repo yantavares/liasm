@@ -10,16 +10,16 @@ def create_memory_files():
     # Define the path one level above the script's directory
     parent_directory = os.path.join(script_directory, '..')
 
-    ram_path = os.path.join(parent_directory, 'RAM.txt')
-    rom_path = os.path.join(parent_directory, 'ROM.txt')
+    ram_path = os.path.join(parent_directory, 'MEMdata.txt')
+    rom_path = os.path.join(parent_directory, 'MEMtext.txt')
 
     try:
-        # Create RAM.txt and write zeros
+        # Create MEMdata.txt and write zeros
         with open(ram_path, 'w') as ram_file:
             for _ in range(addresses):
                 ram_file.write(zero_value + '\n')
 
-        # Create ROM.txt and write zeros
+        # Create MEMtext.txt and write zeros
         with open(rom_path, 'w') as rom_file:
             for _ in range(addresses):
                 rom_file.write(zero_value + '\n')

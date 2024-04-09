@@ -1,4 +1,4 @@
 .vscode/
 liasm/bin/
-liasm/RAM.txt
-liasm/ROM.txt
+liasm/MEMdata.txt
+liasm/MEMtext.txt
