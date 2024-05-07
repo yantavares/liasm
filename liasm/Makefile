@@ -13,7 +13,7 @@ TESTFILE = $(TESTDIR)/runTests.cpp
 all: create_memories $(TARGET)
 
 create_memories:
-	/opt/anaconda3/bin/python /Users/yantavares/sb/liasm/utils/createMemories.py
+	python3 utils/createMemories.py
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $^ -o $@
